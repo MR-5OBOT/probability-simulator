@@ -17,9 +17,9 @@ Get the latest version of the app for your platform:
 
 | Platform  | File | Description |
 |-----------|------|-------------|
-| 🪟 **Windows** | [Download .exe](https://github.com/YourUser/YourRepo/releases/download/v1.0.0/my_app.exe) | Windows executable installer |
-| 🐧 **Linux** | [Download .app](https://github.com/YourUser/YourRepo/releases/download/v1.0.0/app) | Linux binary executable |
-| 📦 **Source Code** | [Download .zip](https://github.com/YourUser/YourRepo/archive/refs/tags/v1.0.0.zip) | Source code archive |
+| 🪟 **Windows** | [Download .exe](https://github.com/YourUser/YourRepo/releases/latest/download/my_app.exe) | Windows executable installer |
+| 🐧 **Linux** | [Download .app](https://github.com/YourUser/YourRepo/releases/latest/download/app) | Linux binary executable |
+| 📦 **Source Code** | [Download .zip](https://github.com/YourUser/YourRepo/releases/latest/download/YourRepo-v1.0.0.zip) | Source code archive |
 
 Find older versions and release notes on the [Releases Page](https://github.com/YourUser/YourRepo/releases).
 
@@ -37,6 +37,7 @@ Find older versions and release notes on the [Releases Page](https://github.com/
 2. Make the file executable:
    ```bash
    chmod +x app
+
 3. Run the binary:
    ``` bash  
    ./app
