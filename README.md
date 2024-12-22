@@ -13,15 +13,7 @@ A powerful and intuitive probability simulation tool for traders and researchers
 
 ## 📥 Downloads
 
-Get the latest version of the app for your platform:
-
-| Platform  | File | Description |
-|-----------|------|-------------|
-| 🪟 **Windows** | [Download .exe](https://github.com/YourUser/YourRepo/releases/latest/download/my_app.exe) | Windows executable installer |
-| 🐧 **Linux** | [Download .app](https://github.com/YourUser/YourRepo/releases/latest/download/app) | Linux binary executable |
-| 📦 **Source Code** | [Download .zip](https://github.com/YourUser/YourRepo/releases/latest/download/YourRepo-v1.0.0.zip) | Source code archive |
-
-Find older versions and release notes on the [Releases Page](https://github.com/YourUser/YourRepo/releases).
+Get the latest version of the app for your platform:  [Releases Page](https://github.com/MR-5OBOT/probability-simulator/releases/).
 
 ---
 
