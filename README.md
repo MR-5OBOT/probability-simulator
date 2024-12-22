@@ -37,4 +37,6 @@ Find older versions and release notes on the [Releases Page](https://github.com/
 2. Make the file executable:
    ```bash
    chmod +x app
+3. Run the binary:
+   ``` bash  
    ./app
