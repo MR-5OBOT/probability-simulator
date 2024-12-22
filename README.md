@@ -27,7 +27,7 @@ Get the latest version of the app for your platform: [Releases Page](https://git
 
 ### Linux
 
-1. Download the `app` file.
+1. Download the [`app`](https://github.com/MR-5OBOT/probability-simulator/releases/) file.
 2. Make the file executable:
 
    ```bash
