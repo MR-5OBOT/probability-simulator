@@ -1,41 +1,24 @@
-# 📊 Probability Simulator
+# Trading tool collection to help you trade better
 
-A powerful and intuitive probability simulation tool for traders and researchers. Available for Linux, Windows, and source code enthusiasts!
+## Features
 
----
+- [ ] **Position size calculator** (forex / futures)
+- [ ] **Mininum Win-Rate required (Formula)**
+- [ ] **Expectency calculator**
+- [ ] **Risk calculator (risk per trade)**
+- [ ] **Risk Management Model Maker**
+- [ ] **Risk of Ruin Calculator**
 
-## 🚀 Features
+## How to use
 
-- Simulate trading probabilities effortlessly.
-- Cross-platform support: Linux and Windows.
-- Easy-to-use interface.
+1. Clone the repository or download the zip file
+2. Make sure the app file is executable
+3. Run the app file
 
----
+### **Todos:**
 
-## 📥 Downloads
-
-Get the latest version of the app for your platform: [Releases Page](https://github.com/MR-5OBOT/probability-simulator/releases/).
-
----
-
-## 🛠️ Installation
-
-<!--### Windows-->
-<!--1. Download the `.exe` file from the [Downloads](#downloads) section.-->
-<!--2. Run the installer and follow the prompts.-->
-<!--3. Launch the app from your Start Menu or Desktop.-->
-
-### Linux
-
-1. Download the [`app`](https://github.com/MR-5OBOT/probability-simulator/releases/) file.
-2. Make the file executable:
-
-   ```bash
-   chmod +x app
-
-   ```
-
-3. Run the binary:
-   ```bash
-   ./app
-   ```
+- [x] fix the sim button no results
+- [ ] add a chart data after the simulation
+- [ ] test all possible situations for the position sizing func
+- [ ] test ------------------------------- probability simulator func
+- [ ] make the futures position sizing section
