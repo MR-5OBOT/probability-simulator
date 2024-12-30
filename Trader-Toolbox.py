@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 from random import random
 
 # Import the functions
-from formulas.position_size import get_position_sizing_result
+from formulas.position_size_forex import get_position_sizing_result_forex
+from formulas.position_size_futures import get_position_sizing_result_futures
 
 
 # Main app window
@@ -38,38 +39,73 @@ notebook.add(position_sizing_futures_tab, text="Position Sizing futures")
 notebook.add(probability_sim_tab, text="probability simulator")
 
 
-# ------------------------------------------------------------------
-def calculate_position_size():
-    account_balance = float(entry_account_balance.get())
-    risk_percentage = float(entry_risk_percentage.get())
-    stop_loss_pips = float(entry_stop_loss_pips.get())
-    pip_value = float(entry_pip_value.get())
-    result = get_position_sizing_result(account_balance, risk_percentage, stop_loss_pips, pip_value)
+# position_size_forex
+def calculate_position_size_forex():
+    account_balance = float(entry_account_balance_forex.get())
+    risk_dollar = float(entry_amount_risk_forex.get())
+    stop_loss_pips = float(entry_stop_loss_pips_forex.get())
+    pip_value = float(entry_pip_value_forex.get())
+    result = get_position_sizing_result_forex(account_balance, risk_dollar, stop_loss_pips, pip_value)
     label_result.config(text=result)
 
 tk.Label(position_sizing_forex_tab, text="Position Sizing (Forex)", font=("Arial", 20)).pack(pady=20)
 
-tk.Label(position_sizing_forex_tab, text="Account Balance:").pack()
-entry_account_balance = tk.Entry(position_sizing_forex_tab)
-entry_account_balance.pack()
+tk.Label(position_sizing_forex_tab, text="Account Balance:").pack(pady=2)
+entry_account_balance_forex = tk.Entry(position_sizing_forex_tab)
+entry_account_balance_forex.pack(pady=2)
 
-tk.Label(position_sizing_forex_tab, text="Risk Percentage:").pack()
-entry_risk_percentage = tk.Entry(position_sizing_forex_tab)
-entry_risk_percentage.pack()
+tk.Label(position_sizing_forex_tab, text="Dollar Risk $:").pack(pady=2)
+entry_amount_risk_forex = tk.Entry(position_sizing_forex_tab)
+entry_amount_risk_forex.pack(pady=2)
 
-tk.Label(position_sizing_forex_tab, text="Stop Loss (pips):").pack()
-entry_stop_loss_pips = tk.Entry(position_sizing_forex_tab)
-entry_stop_loss_pips.pack()
+tk.Label(position_sizing_forex_tab, text="Stop Loss (pips):").pack(pady=2)
+entry_stop_loss_pips_forex = tk.Entry(position_sizing_forex_tab)
+entry_stop_loss_pips_forex.pack(pady=2)
 
-tk.Label(position_sizing_forex_tab, text="pip value:").pack()
-entry_pip_value = tk.Entry(position_sizing_forex_tab)
-entry_pip_value.pack()
+tk.Label(position_sizing_forex_tab, text="pip value:").pack(pady=2)
+entry_pip_value_forex = tk.Entry(position_sizing_forex_tab)
+entry_pip_value_forex.pack(pady=2)
 
-button_calculate = tk.Button(position_sizing_forex_tab, text="Calculate", command=calculate_position_size)
+button_calculate = tk.Button(position_sizing_forex_tab, text="Calculate", command=calculate_position_size_forex)
 button_calculate.pack(padx=5, pady=5)
 
 label_result = tk.Label(position_sizing_forex_tab)
-label_result.pack()
+label_result.pack(pady=2)
+
+
+# position_size_futures
+def calculate_position_size_futures():
+    account_balance = float(entry_account_balance_futures.get())
+    risk_dollar = entry_amount_risk_futures.get().strip("$")
+    stop_loss_pips = float(entry_stop_loss_points_futures.get())
+    point_value = float(entry_point_value_futures.get())
+    result = get_position_sizing_result_futures(account_balance, risk_dollar, stop_loss_pips, point_value)
+    label_result.config(text=result)
+
+tk.Label(position_sizing_futures_tab, text="Position Sizing (Futures)", font=("Arial", 20)).pack(pady=20)
+
+tk.Label(position_sizing_futures_tab, text="Account Balance:").pack(pady=2)
+entry_account_balance_futures = tk.Entry(position_sizing_futures_tab)
+entry_account_balance_futures.pack(pady=2)
+
+tk.Label(position_sizing_futures_tab, text="Dollar Risk $:").pack(pady=2)
+entry_amount_risk_futures = tk.Entry(position_sizing_futures_tab)
+entry_amount_risk_futures.pack(pady=2)
+
+tk.Label(position_sizing_futures_tab, text="Stop Loss (points):").pack(pady=2)
+entry_stop_loss_points_futures = tk.Entry(position_sizing_futures_tab)
+entry_stop_loss_points_futures.pack(pady=2)
+
+tk.Label(position_sizing_futures_tab, text="P value: MNQ=2$ MES=5$").pack(pady=2)
+entry_point_value_futures = tk.Entry(position_sizing_futures_tab)
+entry_point_value_futures.pack(pady=2)
+
+button_calculate = tk.Button(position_sizing_futures_tab, text="Calculate", command=calculate_position_size_futures)
+button_calculate.pack(padx=5, pady=5)
+
+label_result = tk.Label(position_sizing_futures_tab)
+label_result.pack(pady=2)
+
 
 # probability simulator func
 def probability_simulator():
@@ -121,23 +157,23 @@ def probability_simulator():
 # probability_simulator GUI
 tk.Label(probability_sim_tab, text="Trading Simulator", font=("Arial", 24)).pack(pady=20)
 
-tk.Label(probability_sim_tab, text="Initial Balance:").pack()
+tk.Label(probability_sim_tab, text="Initial Balance:").pack(pady=2)
 balance_entry = tk.Entry(probability_sim_tab)
 balance_entry.pack(pady=5)
 
-tk.Label(probability_sim_tab, text="Risk Percentage:").pack()
+tk.Label(probability_sim_tab, text="Risk Percentage:").pack(pady=2)
 risk_entry = tk.Entry(probability_sim_tab)
 risk_entry.pack(pady=5)
 
-tk.Label(probability_sim_tab, text="Risk-Reward Ratio:").pack()
+tk.Label(probability_sim_tab, text="Risk-Reward Ratio:").pack(pady=2)
 rr_entry = tk.Entry(probability_sim_tab)
 rr_entry.pack(pady=5)
 
-tk.Label(probability_sim_tab, text="Number of Trades:").pack()
+tk.Label(probability_sim_tab, text="Number of Trades:").pack(pady=2)
 trades_entry = tk.Entry(probability_sim_tab)
 trades_entry.pack(pady=5)
 
-tk.Button(probability_sim_tab, text="Run Simulation", command=probability_simulator).pack()
+tk.Button(probability_sim_tab, text="Run Simulation", command=probability_simulator).pack(pady=2)
 
 sim_label = tk.Label(probability_sim_tab, text="")
 sim_label.pack(pady=10)
