@@ -1,21 +1,16 @@
 from tkinter import messagebox
 
-def get_position_sizing_result_forex(account_balance, risk_percentage, stop_loss_pips, pip_value):
+def get_position_sizing_result_forex(account_balance, risk_dollar, stop_loss_pips, pip_value):
     try:
-        # formula
-        risk_amount = account_balance * (risk_percentage / 100)
-        position_size = risk_amount / (stop_loss_pips * pip_value)
+        position_size = float(risk_dollar) / (stop_loss_pips * pip_value) # formula with dollar risk
 
         # display the lot size
-        messagebox.showinfo(title="Position Size", message=(f"Position Size: {position_size} lot"))
-        return f"Position Size: {position_size} lot"
+        messagebox.showinfo(title="Position Size", message=(f"Position Size: {position_size} Lot"))
+        return f"Position Size: {position_size} Lots"
 
-    except ValueError:
-        return "Invalid Inputs!"
     except ZeroDivisionError:
-        return "Stop loss cannot be zero"
+        return "Inputs cannot be zero."
+    except ValueError:
+        return "Invalid inputs."
     except Exception as e:
-        return str(e)
-
-
-
+        return f"Error: {str(e)}"

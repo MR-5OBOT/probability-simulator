@@ -42,7 +42,7 @@ notebook.add(probability_sim_tab, text="probability simulator")
 # position_size_forex
 def calculate_position_size_forex():
     account_balance = float(entry_account_balance_forex.get())
-    risk_dollar = float(entry_amount_risk_forex.get())
+    risk_dollar = float(entry_amount_risk_forex.get().strip("$"))
     stop_loss_pips = float(entry_stop_loss_pips_forex.get())
     pip_value = float(entry_pip_value_forex.get())
     result = get_position_sizing_result_forex(account_balance, risk_dollar, stop_loss_pips, pip_value)
@@ -62,7 +62,7 @@ tk.Label(position_sizing_forex_tab, text="Stop Loss (pips):").pack(pady=2)
 entry_stop_loss_pips_forex = tk.Entry(position_sizing_forex_tab)
 entry_stop_loss_pips_forex.pack(pady=2)
 
-tk.Label(position_sizing_forex_tab, text="pip value:").pack(pady=2)
+tk.Label(position_sizing_forex_tab, text="Pip value: (eurusd=10$)").pack(pady=2)
 entry_pip_value_forex = tk.Entry(position_sizing_forex_tab)
 entry_pip_value_forex.pack(pady=2)
 
@@ -148,7 +148,7 @@ def probability_simulator():
         plt.ylabel("Balance ($)")
         plt.grid(True)
         plt.savefig("Simulation.png")
-        # plt.show()
+        plt.show()
 
     except ValueError:
         sim_label.config(text="Error: Please enter valid numbers.")
@@ -186,7 +186,5 @@ def on_closing():
 app.protocol("WM_DELETE_WINDOW", on_closing)
 
 app.mainloop() # Run App
-
-
 
 
