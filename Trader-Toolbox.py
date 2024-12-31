@@ -12,7 +12,7 @@ from formulas.position_size_futures import get_position_sizing_result_futures
 # Main app window
 app = tk.Tk()
 app.title("Trading Toolbox")
-app.geometry("500x400")
+# app.geometry("500x400")
 
 # colors
 # style = ttk.Style()
@@ -21,7 +21,7 @@ app.geometry("500x400")
 # style.config("TFrame", background="grey")
 
 # Create a Notebook
-notebook = ttk.Notebook(app, style="Vertical.TNotebook") # Create a Notebook with vertical tabs
+notebook = ttk.Notebook(app, style="Horizonal.TNotebook") # Create a Notebook with vertical tabs
 notebook.pack(expand=True, fill="both")
 
 # Apply a custom style for vertical tabs
@@ -33,10 +33,12 @@ style.configure("Vertical.TNotebook.Tab", width=20, padding=(10, 10))
 position_sizing_forex_tab = ttk.Frame(notebook)
 position_sizing_futures_tab = ttk.Frame(notebook)
 probability_sim_tab = ttk.Frame(notebook)
+rr_required_tab = ttk.Frame(notebook)
 
 notebook.add(position_sizing_forex_tab, text="Position Sizing forex")
 notebook.add(position_sizing_futures_tab, text="Position Sizing futures")
 notebook.add(probability_sim_tab, text="probability simulator")
+notebook.add(rr_required_tab, text="RR Required Formula")
 
 
 # position_size_forex
