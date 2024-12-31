@@ -181,6 +181,40 @@ sim_label = tk.Label(probability_sim_tab, text="")
 sim_label.pack(pady=10)
 
 
+# Min Risk-Reward Required func
+def calculate_min_rr_required():
+    try:
+        win_wate = float(win_rate_input.get())
+
+        # Validate inputs
+        if win_wate <= 0:
+            rr_result_label.config(text="Error: All inputs must be positive numbers.")
+
+        # Formula
+        rr_result = (1 - win_wate) / win_wate
+
+        # Display results
+        messagebox.showinfo(title="R-R Required", message=(f"Min Risk-Reward required is: {rr_result:.2f}R"))
+        rr_result_label.config(text=(f"Min Risk-Reward Required is: {rr_result}"))
+
+    except ValueError:
+        rr_result_label.config(text="Error: Please enter valid numbers.")
+
+
+tk.Label(rr_required_tab, text='"Calculate the minimum Risk-Reward ratio required based on your system\'s Win-Rate:"', font=("Arial", 11)).pack(pady=10)
+
+rr_label = tk.Label(rr_required_tab, text="Win-Rate: (0.5 = 50%)")
+rr_label.pack(pady=5)
+
+win_rate_input = tk.Entry(rr_required_tab)
+win_rate_input.pack(pady=5)
+
+tk.Button(rr_required_tab, text="Calculate", command=calculate_min_rr_required).pack(pady=5)
+
+rr_result_label = tk.Label(rr_required_tab)
+rr_result_label.pack(pady=5)
+
+
 # popup after closing
 def on_closing(): 
     messagebox.showwarning(title="DON'T FORGET", message="accept the loss before it happens")
