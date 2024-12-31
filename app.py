@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from random import random
 
 # Import the functions
-from formulas.position_size_forex import get_position_sizing_result_forex
-from formulas.position_size_futures import get_position_sizing_result_futures
+from src.formulas.position_size_forex import get_position_sizing_result_forex
+from src.formulas.position_size_futures import get_position_sizing_result_futures
 
 
 # Main app window
@@ -221,6 +221,5 @@ def on_closing():
     app.destroy()
 app.protocol("WM_DELETE_WINDOW", on_closing)
 
+
 app.mainloop() # Run App
-
-
