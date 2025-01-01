@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from random import random
 
 # Import the functions
-from src.formulas.position_size_forex import get_position_sizing_result_forex
-from src.formulas.position_size_futures import get_position_sizing_result_futures
+from formulas.position_size_forex import get_position_sizing_result_forex
+from formulas.position_size_futures import get_position_sizing_result_futures
 
 
 # Main app window
@@ -43,13 +43,19 @@ notebook.add(rr_required_tab, text="RR Required Formula")
 
 # position_size_forex
 def calculate_position_size_forex():
-    account_balance = float(entry_account_balance_forex.get())
-    risk_dollar = float(entry_amount_risk_forex.get().strip("$"))
-    stop_loss_pips = float(entry_stop_loss_pips_forex.get())
-    pip_value = float(entry_pip_value_forex.get())
-    result = get_position_sizing_result_forex(account_balance, risk_dollar, stop_loss_pips, pip_value)
-    label_result.config(text=result)
+    try:
+        account_balance = float(entry_account_balance_forex.get())
+        risk_dollar = entry_amount_risk_forex.get().strip("$")
+        stop_loss_pips = float(entry_stop_loss_pips_forex.get())
+        pip_value = float(entry_pip_value_forex.get())
 
+        result = get_position_sizing_result_forex(account_balance, risk_dollar, stop_loss_pips, pip_value)
+        label_result_futures_forex.config(text=result)
+    
+    except ValueError:
+        label_result_futures_forex.config(text="Error: Please enter valid numbers.")
+
+# position_size_forex GUI
 tk.Label(position_sizing_forex_tab, text="Position Sizing (Forex)", font=("Arial", 20)).pack(pady=20)
 
 tk.Label(position_sizing_forex_tab, text="Account Balance:").pack(pady=2)
@@ -71,19 +77,25 @@ entry_pip_value_forex.pack(pady=2)
 button_calculate = tk.Button(position_sizing_forex_tab, text="Calculate", command=calculate_position_size_forex)
 button_calculate.pack(padx=5, pady=5)
 
-label_result = tk.Label(position_sizing_forex_tab)
-label_result.pack(pady=2)
+label_result_futures_forex = tk.Label(position_sizing_forex_tab)
+label_result_futures_forex.pack(pady=2)
 
 
 # position_size_futures
 def calculate_position_size_futures():
-    account_balance = float(entry_account_balance_futures.get())
-    risk_dollar = entry_amount_risk_futures.get().strip("$")
-    stop_loss_pips = float(entry_stop_loss_points_futures.get())
-    point_value = float(entry_point_value_futures.get())
-    result = get_position_sizing_result_futures(account_balance, risk_dollar, stop_loss_pips, point_value)
-    label_result.config(text=result)
+    try:
+        account_balance = float(entry_account_balance_futures.get())
+        risk_dollar = entry_amount_risk_futures.get().strip("$")
+        stop_loss_points = float(entry_stop_loss_points_futures.get())
+        point_value = float(entry_point_value_futures.get())
 
+        result = get_position_sizing_result_futures(account_balance, risk_dollar, stop_loss_points, point_value)
+        label_result_futures.config(text=result)
+
+    except ValueError:
+        label_result_futures.config(text="Error: Please enter valid numbers.")
+
+# position_size_futures GUI
 tk.Label(position_sizing_futures_tab, text="Position Sizing (Futures)", font=("Arial", 20)).pack(pady=20)
 
 tk.Label(position_sizing_futures_tab, text="Account Balance:").pack(pady=2)
@@ -105,8 +117,8 @@ entry_point_value_futures.pack(pady=2)
 button_calculate = tk.Button(position_sizing_futures_tab, text="Calculate", command=calculate_position_size_futures)
 button_calculate.pack(padx=5, pady=5)
 
-label_result = tk.Label(position_sizing_futures_tab)
-label_result.pack(pady=2)
+label_result_futures = tk.Label(position_sizing_futures_tab)
+label_result_futures.pack(pady=2)
 
 
 # probability simulator func

@@ -1,35 +1,33 @@
 import tkinter as tk
-from src.formulas import position_size_forex, position_size_futures, probability_sim, min_winrate
+from formulas.min_winrate import min_winrate_calculator
 
-def calculate():
+app = tk.Tk()
+app.title("Risk Reward Ratio Calculator")
+app.geometry("400x200")
+
+
+def calculate_min_winrate():
     try:
-        num1 = float(entry1.get())
-        num2 = float(entry2.get())
-        result = num1 + num2
-        result_label.config(text=f"Result: {result}")
+        risk_reward_ratio = float(rr_entry.get())
+
+        result = min_winrate_calculator(risk_reward_ratio)
+        result_label.config(text=result)
+
     except ValueError:
-        result_label.config(text="Invalid input, please enter numbers.")
+        result_label.config(text="Please enter a valid number.")
+    
 
-# Create the main application window
-root = tk.Tk()
-root.title("Simple Calculator")
+tk.Label(app, text="Risk Reward Ratio:").pack()
 
-# Input fields
-tk.Label(root, text="Enter Number 1:").grid(row=0, column=0, padx=10, pady=5)
-entry1 = tk.Entry(root)
-entry1.grid(row=0, column=1, padx=10, pady=5)
+rr_entry = tk.Entry(app)
+rr_entry.pack()
 
-tk.Label(root, text="Enter Number 2:").grid(row=1, column=0, padx=10, pady=5)
-entry2 = tk.Entry(root)
-entry2.grid(row=1, column=1, padx=10, pady=5)
+rr_button = tk.Button(app, text="Calculate", command=calculate_min_winrate)
+rr_button.pack()
 
-# Calculate button
-calc_button = tk.Button(root, text="Calculate", command=calculate)
-calc_button.grid(row=2, column=0, columnspan=2, pady=10)
+result_label = tk.Label(app)
+result_label.pack()
 
-# Result label
-result_label = tk.Label(root)
-result_label.grid(row=3, column=0, columnspan=2, pady=5)
 
-# Start the Tkinter event loop
-root.mainloop()
+app.mainloop()
+

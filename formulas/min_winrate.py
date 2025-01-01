@@ -12,4 +12,5 @@ def min_winrate_calculator(risk_reward_ratio):
         return "Risk-reward ratio must be greater than zero."
 
     winrate = 1 / (1 + risk_reward_ratio) * 100
-    return f"Minimum Win Rate: {winrate:.2f}%"
+    return f"Minimum Win Rate: {winrate:.0f}%"
+
