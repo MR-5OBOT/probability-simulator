@@ -1,33 +1,65 @@
 import tkinter as tk
-from formulas.min_winrate import min_winrate_calculator
+from tkinter import ttk
+from tkinter import messagebox
 
-app = tk.Tk()
-app.title("Risk Reward Ratio Calculator")
-app.geometry("400x200")
+# root window
+root = tk.Tk()
+root.title('Posiion size calculator')
+# root.geometry('300x70')
+root.resizable(False, False)
+
+style = ttk.Style() # access the style database
+style.theme_use('clam') # set the theme
+
+# add a fram_forex
+fram_forex = ttk.Frame(root)
+fram_forex.grid(row=0, column=0, sticky="nsew")
 
 
-def calculate_min_winrate():
+def calculate_position_size_forex():
     try:
-        risk_reward_ratio = float(rr_entry.get())
+        account_balance = float(entry_account_balance_forex.get())
+        risk_dollar = entry_amount_risk_forex.get().strip("$")
+        stop_loss_pips = float(entry_stop_loss_pips_forex.get())
+        pip_value = float(entry_pip_value_forex.get())
 
-        result = min_winrate_calculator(risk_reward_ratio)
-        result_label.config(text=result)
+        # calculate the position size
+        position_size = float(risk_dollar) / (stop_loss_pips * pip_value) # formula with dollar risk
+        # display the lot size
+        messagebox.showinfo(title="Position Size", message=(f"Position Size: {position_size} Lot"))
+        label_result_futures_forex.configure(text=f"Position Size: {position_size} Lots")
 
     except ValueError:
-        result_label.config(text="Please enter a valid number.")
-    
+        label_result_futures_forex.configure(text="Error: Please enter valid numbers.")
+        messagebox.showerror(title="Error", message="Please enter valid numbers.")
 
-tk.Label(app, text="Risk Reward Ratio:").pack()
+# add a title
+forex_title = ttk.Label(fram_forex, text="Position Size Forex", font=("Arial", 14 , "bold"))
+forex_title.grid(column=0, row=0, columnspan=2, padx=10, pady=10)
 
-rr_entry = tk.Entry(app)
-rr_entry.pack()
+# 1
+ttk.Label(fram_forex, text="account balance").grid(column=0, row=1, pady=5, padx=10)
+entry_account_balance_forex = ttk.Entry(fram_forex)
+entry_account_balance_forex.grid(column=1, row=1, sticky="")
+# 2
+ttk.Label(fram_forex, text="amount risk").grid(column=0, row=2, pady=5, padx=10)
+entry_amount_risk_forex = ttk.Entry(fram_forex)
+entry_amount_risk_forex.grid(column=1, row=2, sticky="", pady=5, padx=10)
+# 3
+ttk.Label(fram_forex, text="stop loss").grid(column=0, row=3, pady=5, padx=10)
+entry_stop_loss_pips_forex = ttk.Entry(fram_forex)
+entry_stop_loss_pips_forex.grid(column=1, row=3, sticky="", pady=5, padx=10)
+# 4
+ttk.Label(fram_forex, text="pip value").grid(column=0, row=4, pady=5, padx=10)
+entry_pip_value_forex = ttk.Entry(fram_forex)
+entry_pip_value_forex.grid(column=1, row=4, sticky="", pady=5, padx=10)
+# 5
+calculat_button_forex = ttk.Button(fram_forex, text="Calculate", command=calculate_position_size_forex)
+calculat_button_forex.grid(column=0, row=5, columnspan=2, padx=10, pady=5)
 
-rr_button = tk.Button(app, text="Calculate", command=calculate_min_winrate)
-rr_button.pack()
-
-result_label = tk.Label(app)
-result_label.pack()
+label_result_futures_forex = ttk.Label(fram_forex)
+label_result_futures_forex.grid(column=0, row=6, columnspan=2, pady=5, padx=5)
 
 
-app.mainloop()
-
+# run the app
+root.mainloop()
