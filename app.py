@@ -197,17 +197,14 @@ sim_label.pack(pady=10)
 def calculate_min_rr_required():
     try:
         win_wate = float(win_rate_input.get())
-
-        # Validate inputs
-        if win_wate <= 0:
-            rr_result_label.config(text="Error: All inputs must be positive numbers.")
-
         # Formula
         rr_result = (1 - win_wate) / win_wate
-
-        # Display results
-        messagebox.showinfo(title="R-R Required", message=(f"Min Risk-Reward required is: {rr_result:.2f}R"))
-        rr_result_label.config(text=(f"Min Risk-Reward Required is: {rr_result}"))
+        # Validate inputs
+        if win_wate >= 1:
+            rr_result_label.config(text="Please enter a risk-reward ratio in decimal form.")
+        else:
+            messagebox.showinfo(title="R-R Required", message=(f"Min Risk-Reward required is: {rr_result:.2f}R"))
+            rr_result_label.config(text=(f"Min Risk-Reward Required is: {rr_result}"))
 
     except ValueError:
         rr_result_label.config(text="Error: Please enter valid numbers.")
