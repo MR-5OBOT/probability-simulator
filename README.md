@@ -12,13 +12,28 @@
 ## How to use
 
 1. Clone the repository or download the zip file
+
+```bash
+git clone https//github.com/MR-5OBOT/Traders-toolbox.git
+```
+
 2. Make sure the app file is executable
+
+```bash
+chmod +x app
+```
+
 3. Run the app file
+
+```bash
+./app
+```
 
 ### **Todos:**
 
 - [x] fix the sim button no results
-- [ ] add a chart data after the simulation
-- [ ] test all possible situations for the position sizing func
-- [ ] test ------------------------------- probability simulator func
-- [ ] make the futures position sizing section
+- [x] add a chart data after the simulation
+- [x] test all possible situations for the position sizing func
+- [x] test ------------------------------- probability simulator func
+- [x] make the futures position sizing section
+- [ ] fix widgets positioning
