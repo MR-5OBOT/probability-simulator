@@ -14,7 +14,7 @@
 1. Clone the repository or download the zip file
 
 ```bash
-git clone https//github.com/MR-5OBOT/Traders-toolbox.git
+git clone https://github.com/MR-5OBOT/Traders-Toolbox.git
 ```
 
 2. Make sure the app file is executable

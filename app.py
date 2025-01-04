@@ -10,9 +10,10 @@ from formulas.position_size_futures import get_position_sizing_result_futures
 
 # Main app window
 app = tk.Tk()
-app.title("Trading Toolbox")
-app.geometry("800x600")
-# app.resizable(False, False)
+app.title("Traders Toolbox")
+# app.geometry("800x600")
+app.resizable(False, False)
+# app.iconbitmap("./images/mr5obot.ico")
 
 # Create a Notebook
 notebook = ttk.Notebook(app)
@@ -26,12 +27,12 @@ style.theme_use("clam")
 position_sizing_forex_tab = ttk.Frame(notebook)
 position_sizing_futures_tab = ttk.Frame(notebook)
 probability_sim_tab = ttk.Frame(notebook)
-rr_required_tab = ttk.Frame(notebook)
+# rr_required_tab = ttk.Frame(notebook)
 
 notebook.add(position_sizing_forex_tab, text="Position Sizing forex")
 notebook.add(position_sizing_futures_tab, text="Position Sizing futures")
 notebook.add(probability_sim_tab, text="probability simulator")
-notebook.add(rr_required_tab, text="RR Required Formula")
+# notebook.add(rr_required_tab, text="RR Required Formula")
 
 
 # position_size_forex
@@ -49,7 +50,8 @@ def calculate_position_size_forex():
         label_result_futures_forex.configure(text="Error: Please enter valid numbers.")
 
 # position_size_forex GUI
-ttk.Label(position_sizing_forex_tab, text="Position Sizing (Forex)", font=("Arial", 20)).pack(pady=25, padx=25)
+forex_title = ttk.Label(position_sizing_forex_tab, text="Position Sizing (Forex)", font=("Arial", 22))
+forex_title.pack(pady=25, padx=25)
 
 ttk.Label(position_sizing_forex_tab, text="Account Balance:").pack(pady=5, padx=5)
 entry_account_balance_forex = ttk.Entry(position_sizing_forex_tab)
@@ -89,7 +91,7 @@ def calculate_position_size_futures():
         label_result_futures.configure(text="Error: Please enter valid numbers.")
 
 # position_size_futures GUI
-ttk.Label(position_sizing_futures_tab, text="Position Sizing (Futures)", font=("Arial", 20)).pack(pady=5, padx=5)
+ttk.Label(position_sizing_futures_tab, text="Position Sizing (Futures)", font=("Arial", 22)).pack(pady=25, padx=25)
 
 ttk.Label(position_sizing_futures_tab, text="Account Balance:").pack(pady=5, padx=5)
 entry_account_balance_futures = ttk.Entry(position_sizing_futures_tab)
@@ -162,7 +164,7 @@ def probability_simulator():
 
 
 # probability_simulator GUI
-ttk.Label(probability_sim_tab, text="Trading Simulator", font=("Arial", 24)).pack(pady=5, padx=5)
+ttk.Label(probability_sim_tab, text="Trading Simulator", font=("Arial", 24)).pack(pady=25, padx=25)
 
 ttk.Label(probability_sim_tab, text="Initial Balance:").pack(pady=5, padx=5)
 balance_entry = ttk.Entry(probability_sim_tab)
@@ -187,34 +189,34 @@ sim_label.pack(pady=5, padx=5)
 
 
 # Min Risk-Reward Required func
-def calculate_min_rr_required():
-    try:
-        win_wate = float(win_rate_input.get())
-        # Formula
-        rr_result = (1 - win_wate) / win_wate
-        # Validate inputs
-        if win_wate >= 1:
-            rr_result_label.configure(text="Please enter a risk-reward ratio in decimal form.")
-        else:
-            messagebox.showinfo(title="R-R Required", message=(f"Min Risk-Reward required is: {rr_result:.1f}R"))
-            rr_result_label.configure(text=(f"Min Risk-Reward Required is: {rr_result}"))
-
-    except ValueError:
-        rr_result_label.configure(text="Error: Please enter valid numbers.")
-
-
-ttk.Label(rr_required_tab, text='"Calculate the minimum Risk-Reward ratio required based on your system\'s Win-Rate:"', font=("Arial", 11)).pack(pady=5, padx=5)
-
-rr_label = ttk.Label(rr_required_tab, text="Win-Rate: (0.5 = 50%)")
-rr_label.pack(pady=5, padx=5)
-
-win_rate_input = ttk.Entry(rr_required_tab)
-win_rate_input.pack(pady=5, padx=5)
-
-ttk.Button(rr_required_tab, text="Calculate", command=calculate_min_rr_required).pack(pady=5, padx=5)
-
-rr_result_label = ttk.Label(rr_required_tab)
-rr_result_label.pack(pady=5, padx=5)
+# def calculate_min_rr_required():
+#     try:
+#         win_wate = float(win_rate_input.get())
+#         # Formula
+#         rr_result = (1 - win_wate) / win_wate
+#         # Validate inputs
+#         if win_wate >= 1:
+#             rr_result_label.configure(text="Please enter a risk-reward ratio in decimal form.")
+#         else:
+#             messagebox.showinfo(title="R-R Required", message=(f"Min Risk-Reward required is: {rr_result:.1f}R"))
+#             rr_result_label.configure(text=(f"Min Risk-Reward Required is: {rr_result}"))
+#
+#     except ValueError:
+#         rr_result_label.configure(text="Error: Please enter valid numbers.")
+#
+#
+# ttk.Label(rr_required_tab, text='"Calculate the minimum Risk-Reward ratio required based on your system\'s Win-Rate:"', font=("Arial", 11)).pack(pady=5, padx=5)
+#
+# rr_label = ttk.Label(rr_required_tab, text="Win-Rate: (0.5 = 50%)")
+# rr_label.pack(pady=5, padx=5)
+#
+# win_rate_input = ttk.Entry(rr_required_tab)
+# win_rate_input.pack(pady=5, padx=5)
+#
+# ttk.Button(rr_required_tab, text="Calculate", command=calculate_min_rr_required).pack(pady=5, padx=5)
+#
+# rr_result_label = ttk.Label(rr_required_tab)
+# rr_result_label.pack(pady=5, padx=5)
 
 
 # popup after closing
