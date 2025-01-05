@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 import matplotlib.pyplot as plt
-from random import random
+import random
 
 # Import the functions
 from formulas.position_size_forex import get_position_sizing_result_forex
@@ -14,14 +14,21 @@ app.title("Traders Toolbox")
 # app.geometry("800x600")
 app.resizable(False, False)
 # app.iconbitmap("./images/mr5obot.ico")
+# app.configure(borderwidth=5, relief="raised")
 
 # Create a Notebook
 notebook = ttk.Notebook(app)
-notebook.pack(expand=True, fill="both", padx=20, pady=20)
+notebook.pack(expand=True, fill="both")
+notebook.pack(pady=10, padx=10)
 
 # Apply a custom style for vertical tabs
 style = ttk.Style(app)
 style.theme_use("clam")
+
+# Configure the TNotebook.Tab style
+# style.configure("TNotebook.Tab", background="lightblue", foreground="black")
+# style.map("TNotebook.Tab", background=[("selected", "white")])
+style.configure("TNotebook.Tab", padding=[5, 5], font=("Arial", 12))
 
 # Add Tabs
 position_sizing_forex_tab = ttk.Frame(notebook)
@@ -31,7 +38,7 @@ probability_sim_tab = ttk.Frame(notebook)
 
 notebook.add(position_sizing_forex_tab, text="Position Sizing forex")
 notebook.add(position_sizing_futures_tab, text="Position Sizing futures")
-notebook.add(probability_sim_tab, text="probability simulator")
+notebook.add(probability_sim_tab, text="Probability simulator")
 # notebook.add(rr_required_tab, text="RR Required Formula")
 
 
@@ -65,7 +72,7 @@ ttk.Label(position_sizing_forex_tab, text="Stop Loss (pips):").pack(pady=5, padx
 entry_stop_loss_pips_forex = ttk.Entry(position_sizing_forex_tab)
 entry_stop_loss_pips_forex.pack(pady=5, padx=5)
 
-ttk.Label(position_sizing_forex_tab, text="Pip value: (eurusd=5$)").pack(pady=5, padx=10)
+ttk.Label(position_sizing_forex_tab, text="Pip value: (eurusd=10$)").pack(pady=5, padx=10)
 entry_pip_value_forex = ttk.Entry(position_sizing_forex_tab)
 entry_pip_value_forex.pack(pady=5, padx=5)
 
@@ -133,21 +140,41 @@ def probability_simulator():
         balance = initial_balance
         balance_history = [initial_balance]
         wins = 0
+
+        # Loop through the number of trades
         for _ in range(num_trades):
-            risk_amount = balance * (risk_percent / 50)
-            if random() > 0.5:
+            risk_amount = balance * (risk_percent / 100)
+            if random.random() > 0.5:
                 balance += risk_amount * rr_ratio
                 wins += 1
             else:
                 balance -= risk_amount
+
             balance_history.append(balance)
 
-        # Calculate results
-        win_rate = (wins / num_trades) * 50
-        total_return = ((balance - initial_balance) / initial_balance) * 50
+        # Calculate Max Drawdown from Balance History
+        max_drawdown = 0
+        peak_balance = balance_history[0]
 
-        # Display results
-        messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%")
+        for balance in balance_history:
+            if balance > peak_balance:
+                peak_balance = balance
+            drawdown = (peak_balance - balance) / peak_balance
+            max_drawdown = max(max_drawdown, drawdown)
+
+        # Convert to percentage
+        max_drawdown *= 100
+        
+        # Calculate results
+        win_rate = (wins / num_trades) * 100
+        total_return = ((balance - initial_balance) / initial_balance) * 100
+
+        # Print results in console
+        print(total_return)
+        print(max_drawdown)
+
+        # Display results in a messagebox
+        messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
 
         # Plot the balance history
         plt.style.use("ggplot")
@@ -155,7 +182,7 @@ def probability_simulator():
         plt.title("Trading Simulation Results")
         plt.xlabel("Number of Trades")
         plt.ylabel("Balance ($)")
-        plt.grid()
+        plt.grid(True)
         plt.savefig("Simulation.png")
         plt.show()
 

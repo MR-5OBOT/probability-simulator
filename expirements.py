@@ -10,7 +10,7 @@ style = ttk.Style()
 # style.configure("TNotebook", background="white")
 # style.configure("TNotebook.Tab", background="white", padding=[10, 5])
 style.theme_use("clam") 
-print(style.theme_names())
+# print(style.theme_names())
 
 
 # Create a Notebook
