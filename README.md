@@ -2,12 +2,7 @@
 
 ## Features
 
-- [ ] **Position size calculator** (forex / futures)
-- [ ] **Mininum Win-Rate required (Formula)**
-- [ ] **Expectency calculator**
-- [ ] **Risk calculator (risk per trade)**
-- [ ] **Risk Management Model Maker**
-- [ ] **Risk of Ruin Calculator**
+- [ ] **tow types of simulations (random & winrate based)**
 
 ## How to use
 
@@ -25,15 +20,14 @@ chmod +x app
 
 3. Run the app file
 
-```bash
-./app
+```python
+python3 app.py
 ```
 
 ### **Todos:**
 
-- [x] fix the sim button no results
-- [x] add a chart data after the simulation
-- [x] test all possible situations for the position sizing func
-- [x] test ------------------------------- probability simulator func
-- [x] make the futures position sizing section
-- [ ] fix widgets positioning
+- [ ] make the UI for the app
+- [ ] make 2 tabs for the 2 types of simulations
+- [ ] plot the results of the simulations in a graph inside the app
+- [ ] add a feature to save the results of the simulations to a file
+- [ ] fix position of the widgets in the app
