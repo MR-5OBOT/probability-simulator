@@ -5,37 +5,58 @@ import matplotlib.pyplot as plt
 import random
 
 
-# Main app window
+# Main GUI setup
 app = tk.Tk()
-app.title("Traders Toolbox")
-app.geometry("1200x650")
-app.resizable(False, False)
-# app.configure(borderwidth=5, relief="raised")
-
-# Apply a custom style for vertical tabs
-style = ttk.Style(app)
+style = ttk.Style(app) # Create a style object
 style.theme_use("clam")
 
-# add tabs
-tab_control = ttk.Notebook(app)
-tab_control.pack(expand=1, fill="both")
+# app.tk.call('source', 'forest-dark.tcl') # Load custom theme
+# style.theme_use('forest-dark') # Set custom theme
+
+app.title("Traders Toolbox")
+app.geometry(f"{int(app.winfo_screenwidth() * 0.9)}x{int(app.winfo_screenheight() * 0.9)}") # Set window size dynamically
+# app.geometry("1200x650")
+app.resizable(False, False)
+
+# create a notebook
+notebook = ttk.Notebook(app)
+notebook.pack(expand=True, fill="both")
+
 
 # Create individual tabs
-tab1 = ttk.Frame(tab_control)
-tab2 = ttk.Frame(tab_control)
+tab1 = ttk.Frame(notebook)
+tab2 = ttk.Frame(notebook)
 
-# Configure grid rows and columns
-# tab1.grid_rowconfigure(0, weight=1)  # Add weight to top space
-# tab1.grid_rowconfigure(1, weight=1)  # Add weight to bottom space
-# tab1.grid_columnconfigure(0, weight=1)  # Add weight to left space
-# tab1.grid_columnconfigure(1, weight=1)  # Add weight to right space
+# Add tabs to the notebook
+notebook.add(tab1, text="Probability Simulator")
+notebook.add(tab2, text="tab2")
 
-# add tabs to the window
-tab_control.add(tab1, text="Probability Simulator")
-tab_control.add(tab2, text="Monte Carlo Simulator")
+# ----------------- dynamic frame sizes -----------------
+def dynamic_frame1_tab1():
+    screen_width = app.winfo_screenwidth()
+    screen_height = app.winfo_screenheight()
+    # Frame size calculated based on the screen size
+    frame_width = int(screen_width * 1)
+    frame_height = int(screen_height * 0.08)
+    return frame_width, frame_height
 
+def dynamic_frame2_tab1():
+    screen_width = app.winfo_screenwidth()
+    screen_height = app.winfo_screenheight()
+    # Frame size calculated based on the screen size
+    frame_width = int(screen_width * 0.3)
+    frame_height = int(screen_height * 0.9)
+    return frame_width, frame_height
 
-# probability simulator func
+def dynamic_frame3_tab1():
+    screen_width = app.winfo_screenwidth()
+    screen_height = app.winfo_screenheight()
+    # Frame size calculated based on the screen size
+    frame_width = int(screen_width * 0.6)
+    frame_height = int(screen_height * 0.95)
+    return frame_width, frame_height
+
+# ----------------- Tab1 Functions -----------------
 def probability_simulator():
     try:
         # Get user inputs
@@ -109,32 +130,57 @@ def ploting():
     # plt.savefig("Simulation.png")
     plt.show()
 
+# ----------------- Tab1 Widgets -----------------
+
+# # Create a frame for the title
+# frame1_tab1 = ttk.Frame(tab1, width=dynamic_frame1_tab1()[0], height=dynamic_frame1_tab1()[1], borderwidth=8, relief="raised")
+# frame1_tab1.pack(pady=5, padx=5, side="top", expand=True, fill="both")
+# ttk.Label(frame1_tab1, text="Probability Simulator (random 50/50)", font=("Arial", 24)).pack()
+#
+# # Create a frame for the inputs
+# frame2_tab1 = ttk.Frame(tab1, width=dynamic_frame2_tab1()[0], height=dynamic_frame2_tab1()[1], borderwidth=2, relief="raised")
+# frame2_tab1.pack(pady=5, padx=5, side="left", expand=True, fill="x")
+#
+# # Create a unique style for a specific frame (e.g., "Custom.TFrame")
+# # style.configure("inputs.TFrame", background="white")
+#
+# ttk.Label(frame2_tab1, text="Simulation inputs", font=("Arial", 19)).pack(pady=30)
+#
+# ttk.Label(frame2_tab1, text="Initial Balance:").pack(pady=5)
+# balance_entry = ttk.Entry(frame2_tab1)
+# balance_entry.pack(pady=5)
+#
+# ttk.Label(frame2_tab1, text="Risk %:").pack(pady=5)
+# risk_entry = ttk.Entry(frame2_tab1)
+# risk_entry.pack(pady=5)
+#
+# ttk.Label(frame2_tab1, text="R/R Ratio:").pack(pady=5)
+# rr_entry = ttk.Entry(frame2_tab1)
+# rr_entry.pack(pady=5)
+#
+# ttk.Label(frame2_tab1, text="Number of Trades:").pack(pady=5)
+# trades_entry = ttk.Entry(frame2_tab1)
+# trades_entry.pack(pady=5)
+#
+# sim_button = ttk.Button(frame2_tab1, text="Run Simulation", command=probability_simulator)
+# sim_button.pack(pady=15)
+#
+# sim_label = ttk.Label(frame2_tab1, text="", font=("Arial", 10))
+# sim_label.pack()
+#
+# save_button = ttk.Button(frame2_tab1, text="Save Results", command=ploting, default="disabled", padding=5, width=10)
+# save_button.pack(pady=15)
+#
+# # Create a frame for plotting
+# frame3_tab1 = ttk.Frame(tab1, width=dynamic_frame3_tab1()[0], height=dynamic_frame3_tab1()[1], borderwidth=2, style="plots.TFrame")
+# frame3_tab1.pack(pady=5, padx=5, side="right", expand=True, fill="both")
+#
+# # Create a unique style for a specific frame (e.g., "Custom.TFrame")
+# style.configure("plots.TFrame", background="grey")
+#
+#
 
 
-main_label = ttk.Label(tab1, text="Trading Simulator", font=("Arial", 24))
-main_label.pack()
-
-ttk.Label(tab1, text="Initial Balance:").pack()
-balance_entry = ttk.Entry(tab1)
-balance_entry.pack()
-
-# ttk.Label(tab1, text="Risk Percentage:").grid()
-# risk_entry = ttk.Entry(tab1)
-# risk_entry.grid()
-#
-# ttk.Label(tab1, text="Risk-Reward Ratio:").grid()
-# rr_entry = ttk.Entry(tab1)
-# rr_entry.grid()
-#
-# ttk.Label(tab1, text="Number of Trades:").grid()
-# trades_entry = ttk.Entry(tab1)
-# trades_entry.grid()
-#
-# ttk.Button(tab1, text="Run Simulation", command=probability_simulator).grid()
-#
-# sim_label = ttk.Label(tab1, text="")
-# sim_label.grid()
-#
 
 
 app.mainloop() # Run App

@@ -1,15 +1,22 @@
-# probability simulator func
-def probability_simulator():
+import random
+from tkinter import messagebox
+import matplotlib.pyplot as plt
+
+balance_history = []
+
+def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry):
     try:
         # Get user inputs
-        initial_balance = float(balance_entry.get())
-        risk_percent = float(risk_entry.get())
-        rr_ratio = float(rr_entry.get())
-        num_trades = int(trades_entry.get())
+        initial_balance = float(balanceEntry.get())
+        risk_percent = float(riskEntry.get())
+        rr_ratio = float(rrEntry.get())
+        num_trades = int(nTrades_entry.get())
 
         # Validate inputs
         if initial_balance <= 0 or risk_percent <= 0 or rr_ratio <= 0 or num_trades <= 0:
-            sim_label.configure(text="Error: All inputs must be positive numbers.")
+            # sim_label.configure(text="Error: All inputs must be positive numbers.")
+            messagebox.showinfo(message="Error: All inputs must be positive numbers.")
+            return
 
         # Simulation logic
         balance = initial_balance
@@ -32,15 +39,15 @@ def probability_simulator():
         max_drawdown = 0
         peak_balance = balance_history[0]
 
-        for balance in balance_history:
-            if balance > peak_balance:
-                peak_balance = balance
-            drawdown = (peak_balance - balance) / peak_balance
+        for bal in balance_history:
+            if bal > peak_balance:
+                peak_balance = bal
+            drawdown = (peak_balance - bal) / peak_balance
             max_drawdown = max(max_drawdown, drawdown)
 
         # Convert to percentage
         max_drawdown *= 100
-        
+
         # Calculate results
         win_rate = (wins / num_trades) * 100
         total_return = ((balance - initial_balance) / initial_balance) * 100
@@ -52,9 +59,21 @@ def probability_simulator():
         # Display results in a messagebox
         messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
 
-        # plot the results
+        # Plot the results
         ploting()
 
     except ValueError:
-        sim_label.configure(text="Error: Please enter valid numbers.")
- 
+        messagebox.showerror(message="Error: Please enter valid numbers.")
+
+def ploting():
+    # Plot the balance history
+    # plt.style.use("ggplot")
+    plt.style.use("dark_background")
+    plt.plot(balance_history)
+    plt.title("Trading Simulation Results")
+    plt.xlabel("Number of Trades")
+    plt.ylabel("Balance ($)")
+    plt.grid(True)
+    # plt.savefig("balance_history.png")
+    plt.show()
+
