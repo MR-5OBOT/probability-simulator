@@ -52,10 +52,6 @@ def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry):
         win_rate = (wins / num_trades) * 100
         total_return = ((balance - initial_balance) / initial_balance) * 100
 
-        # Print results in console
-        print(total_return)
-        print(max_drawdown)
-
         # Display results in a messagebox
         messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
 

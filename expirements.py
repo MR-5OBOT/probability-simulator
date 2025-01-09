@@ -13,7 +13,7 @@ app.tk.call('source', 'themes/forest-dark.tcl') # Load custom theme
 style.theme_use('forest-dark') # Set custom theme
 
 app.title("Traders Toolbox")
-app.geometry("1200x650") # Set window size dynamically
+# app.geometry("1200x650") # Set window size dynamically
 
 notebook = ttk.Notebook(app)
 notebook.pack(fill="both", expand=True)
@@ -24,8 +24,9 @@ tab2 = ttk.Frame(notebook)
 notebook.add(tab1, text="Probability Simulator")
 notebook.add(tab2, text="Tab2")
 
+# Tab1 input frame
 inputsLabel = ttk.LabelFrame(tab1, text="Simulation inputs", borderwidth=2, relief="raised", padding=(10, 10))
-inputsLabel.grid(column=0, row=0, padx=10, pady=10, sticky="ew")
+inputsLabel.grid(padx=10, pady=10, column=0, row=0, sticky="nsew")
 
 balanceEntry = ttk.Entry(inputsLabel)
 balanceEntry.insert(0, 'balance')
@@ -49,7 +50,15 @@ nTrades_entry.grid(column=0, row=3, sticky="ew", pady=5)
 
 calculateButton = ttk.Button(inputsLabel, text="Calculate", command=lambda: probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry))
 calculateButton.grid(column=0, row=4, sticky="ew", pady=5)
+save_button = ttk.Button(inputsLabel, text="Save Results", command=lambda: messagebox.showinfo("Save", "Save button clicked"))
+save_button.grid(column=0, row=5, sticky="", pady=5)
 
+# tab1 plot frame
+plotLabel = ttk.LabelFrame(tab1, text="Plot", borderwidth=2, relief="raised", padding=(10, 10))
+plotLabel.grid(column=2, row=0, sticky="", pady=5)
+
+plotframe = ttk.Frame(plotLabel, height=530, width=900, relief="sunken")
+plotframe.grid(column=0, row=0, sticky="", pady=5)
 
 
 
