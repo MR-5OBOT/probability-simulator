@@ -73,3 +73,7 @@ def ploting():
     # plt.savefig("balance_history.png")
     plt.show()
 
+def savePlot():
+    plt.savefig("balance_history.png")
+    messagebox.showinfo(message="Plot saved as 'balance_history.png'")
+
