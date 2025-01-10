@@ -1,8 +1,9 @@
+# import tkinter as tk
+# import matplotlib.pyplot as plt
+# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# from matplotlib.figure import Figure
 import random
 from tkinter import messagebox
-import matplotlib.pyplot as plt
-
-balance_history = []
 
 def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry):
     try:
@@ -56,24 +57,29 @@ def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry):
         messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
 
         # Plot the results
-        ploting()
+        # plot_graph()
 
     except ValueError:
         messagebox.showerror(message="Error: Please enter valid numbers.")
 
-def ploting():
-    # Plot the balance history
-    # plt.style.use("ggplot")
-    plt.style.use("dark_background")
-    plt.plot(balance_history)
-    plt.title("Trading Simulation Results")
-    plt.xlabel("Number of Trades")
-    plt.ylabel("Balance ($)")
-    plt.grid(True)
-    # plt.savefig("balance_history.png")
-    plt.show()
 
-def savePlot():
-    plt.savefig("balance_history.png")
-    messagebox.showinfo(message="Plot saved as 'balance_history.png'")
+def balance_history_var():
+    return balance_history
+
+# def plot_graph():
+#     # Plot the balance history
+#     # plt.style.use("ggplot")
+#     plt.style.use("dark_background")
+#     plt.plot(balance_history)
+#     plt.title("Trading Simulation Results")
+#     plt.xlabel("Number of Trades")
+#     plt.ylabel("Balance ($)")
+#     plt.grid(True)
+#     plt.savefig("balance_history.png")
+#     plt.show()
+
+# def savePlot():
+#     plt.savefig("balance_history.png")
+#     messagebox.showinfo(message="Plot saved as 'balance_history.png'")
+#
 
