@@ -1,9 +1,12 @@
-# import tkinter as tk
-# import matplotlib.pyplot as plt
-# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-# from matplotlib.figure import Figure
+import tkinter as tk
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
 import random
 from tkinter import messagebox
+# from matplotlib.ticker import MaxNLocator
+
+
 
 def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry):
     try:
@@ -21,7 +24,6 @@ def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry):
 
         # Simulation logic
         balance = initial_balance
-        global balance_history
         balance_history = [initial_balance]
         wins = 0
 
@@ -54,32 +56,84 @@ def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry):
         total_return = ((balance - initial_balance) / initial_balance) * 100
 
         # Display results in a messagebox
-        messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
+        # messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
+        messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\n Total Return: {total_return:.2f}%\n Win Rate: {win_rate:.2f}%\n Max Drawdown: {max_drawdown:.2f}%\n Number of Wins: {wins}\n Number of Losses: {num_trades - wins}\n win Rate: {win_rate:.2f}%")
 
-        # Plot the results
-        # plot_graph()
+        # debuging
+        # print(balance_history)
+        print(f"Final Balance: ${balance:.2f}")
+        print(f"Total Return: {total_return:.2f}%")
+        # print(f"Win Rate: {win_rate:.2f}%")
+        print(f"Max Drawdown: {max_drawdown:.2f}%")
+        # print(f"Number of Wins: {wins}")
+        # print(f"Number of Losses: {num_trades - wins}")
+        print(f"Win Rate: {win_rate:.2f}%")
+        # return balance_history
+        return balance_history
 
     except ValueError:
         messagebox.showerror(message="Error: Please enter valid numbers.")
 
 
-def balance_history_var():
-    return balance_history
+def update_plot(plotFrame, balance_history):
+    # Clear the previous plot
+    for widget in plotFrame.winfo_children():
+        widget.destroy()
 
-# def plot_graph():
-#     # Plot the balance history
-#     # plt.style.use("ggplot")
-#     plt.style.use("dark_background")
-#     plt.plot(balance_history)
-#     plt.title("Trading Simulation Results")
-#     plt.xlabel("Number of Trades")
-#     plt.ylabel("Balance ($)")
-#     plt.grid(True)
-#     plt.savefig("balance_history.png")
-#     plt.show()
+    plt.style.use("dark_background")
+    plt.rcParams["figure.figsize"] = (10, 4)
+    fig = Figure()
+    ax = fig.add_subplot(111)
+    ax.plot(balance_history)  # Example data
+    ax.set_title("Simulation Results (random generation)", color='grey', fontsize=18, loc='center', pad=20)
+    # ax.set_xlabel("Number of Trades")
+    # ax.set_ylabel("Account Balance")
+    # ax.grid(color='#1E1E1E', linestyle='--', linewidth=1)
+    # ax.legend()
 
-# def savePlot():
-#     plt.savefig("balance_history.png")
-#     messagebox.showinfo(message="Plot saved as 'balance_history.png'")
-#
+    # remove right line and top line
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+
+    
+    #--------- Theming --------------#
+    # # change balance_history line color
+    # ax.lines[0].set_color("#08134E")
+    #
+    # # change x y line color
+    # ax.spines['bottom'].set_color('#217346')
+    # ax.spines['left'].set_color('#217346')
+    # # ax.spines['top'].set_color('#4E83A3')
+    # # ax.spines['right'].set_color('#4E83A3')
+    #
+    # # change x y ticks color
+    # ax.tick_params(axis='x', colors='grey')
+    # ax.tick_params(axis='y', colors='grey')
+    #
+    # # change x y ticks style
+    # ax.tick_params(axis='x', direction='inout', length=6, width=2)
+    # ax.tick_params(axis='y', direction='inout', length=6, width=2)
+    #
+    # # change x y label color
+    # ax.xaxis.label.set_color('white')
+    # ax.yaxis.label.set_color('white')
+    #
+       #
+    # # change x y label line style
+    # # ax.spines['bottom'].set_linestyle('--')
+    # # ax.spines['left'].set_linestyle('--')
+    #
+    # # change x y label line width
+    # ax.spines['bottom'].set_linewidth(2)
+    # ax.spines['left'].set_linewidth(2)
+    #
+    # control ticks spacing make it dynamic
+    # ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+
+
+
+    canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
+    canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+    canvas.draw()
+
 
