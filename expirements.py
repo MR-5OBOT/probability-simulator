@@ -9,7 +9,7 @@ from custom_func.sim_func import probability_simulator, update_plot
 
 
 def calculate_and_plot():
-    balance_history = probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry)
+    balance_history = probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry, sim_label)
     update_plot(plotFrame, balance_history)
 
 #----- Main App -----#
@@ -60,6 +60,9 @@ nTrades_entry.grid(column=0, row=3, sticky="ew", pady=5)
 
 calculateButton = ttk.Button(inputsLabel, text="Calculate", command=calculate_and_plot)
 calculateButton.grid(column=0, row=4, sticky="ew", pady=5)
+
+sim_label = ttk.Label(inputsLabel, text="")
+sim_label.grid(column=0, row=5, sticky="ew", pady=5)
 
 #----- tab1 plot frame -----#
 plotFrame = ttk.LabelFrame(tab1, text="Plot", padding=(15, 15))

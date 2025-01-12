@@ -1,4 +1,4 @@
-import tkinter as tk
+# import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -8,7 +8,7 @@ from tkinter import messagebox
 
 
 
-def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry):
+def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry, sim_label):
     try:
         # Get user inputs
         initial_balance = float(balanceEntry.get())
@@ -18,7 +18,7 @@ def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry):
 
         # Validate inputs
         if initial_balance <= 0 or risk_percent <= 0 or rr_ratio <= 0 or num_trades <= 0:
-            # sim_label.configure(text="Error: All inputs must be positive numbers.")
+            sim_label.configure(text="Error: All inputs must be positive numbers.")
             messagebox.showinfo(message="Error: All inputs must be positive numbers.")
             return
 
@@ -28,10 +28,10 @@ def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry):
         wins = 0
 
         # Loop through the number of trades
-        for _ in range(num_trades):
+        for trade in range(num_trades):
             risk_amount = balance * (risk_percent / 100)
             if random.random() > 0.5:
-                balance += risk_amount * rr_ratio
+                balance += (risk_amount * rr_ratio)
                 wins += 1
             else:
                 balance -= risk_amount
@@ -60,14 +60,13 @@ def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry):
         messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\n Total Return: {total_return:.2f}%\n Win Rate: {win_rate:.2f}%\n Max Drawdown: {max_drawdown:.2f}%\n Number of Wins: {wins}\n Number of Losses: {num_trades - wins}\n win Rate: {win_rate:.2f}%")
 
         # debuging
-        # print(balance_history)
         print(f"Final Balance: ${balance:.2f}")
         print(f"Total Return: {total_return:.2f}%")
-        # print(f"Win Rate: {win_rate:.2f}%")
         print(f"Max Drawdown: {max_drawdown:.2f}%")
         # print(f"Number of Wins: {wins}")
         # print(f"Number of Losses: {num_trades - wins}")
         print(f"Win Rate: {win_rate:.2f}%")
+
         # return balance_history
         return balance_history
 
@@ -131,9 +130,9 @@ def update_plot(plotFrame, balance_history):
     # ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 
 
-
+    # add canvas to the plotFrame
     canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
-    canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+    canvas.get_tk_widget().pack(fill="both", expand=True)
     canvas.draw()
 
 
