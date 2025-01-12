@@ -8,7 +8,7 @@ from tkinter import messagebox
 
 
 
-def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry, sim_label):
+def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry, result_label):
     try:
         # Get user inputs
         initial_balance = float(balanceEntry.get())
@@ -18,7 +18,7 @@ def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry, sim_l
 
         # Validate inputs
         if initial_balance <= 0 or risk_percent <= 0 or rr_ratio <= 0 or num_trades <= 0:
-            sim_label.configure(text="Error: All inputs must be positive numbers.")
+            result_label.configure(text="Error: All inputs must be positive numbers.")
             messagebox.showinfo(message="Error: All inputs must be positive numbers.")
             return
 
@@ -56,22 +56,15 @@ def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry, sim_l
         total_return = ((balance - initial_balance) / initial_balance) * 100
 
         # Display results in a messagebox
-        # messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
-        messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\n Total Return: {total_return:.2f}%\n Win Rate: {win_rate:.2f}%\n Max Drawdown: {max_drawdown:.2f}%\n Number of Wins: {wins}\n Number of Losses: {num_trades - wins}\n win Rate: {win_rate:.2f}%")
-
-        # debuging
-        print(f"Final Balance: ${balance:.2f}")
-        print(f"Total Return: {total_return:.2f}%")
-        print(f"Max Drawdown: {max_drawdown:.2f}%")
-        # print(f"Number of Wins: {wins}")
-        # print(f"Number of Losses: {num_trades - wins}")
-        print(f"Win Rate: {win_rate:.2f}%")
+        messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
+        result_label.configure(text=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
 
         # return balance_history
         return balance_history
 
     except ValueError:
         messagebox.showerror(message="Error: Please enter valid numbers.")
+        result_label.configure(text="Error: Please enter valid numbers.")
 
 
 def update_plot(plotFrame, balance_history):
@@ -134,5 +127,4 @@ def update_plot(plotFrame, balance_history):
     canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
     canvas.get_tk_widget().pack(fill="both", expand=True)
     canvas.draw()
-
 
