@@ -4,14 +4,16 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import random
 from tkinter import messagebox
+from tkinter import filedialog
 # from matplotlib.ticker import MaxNLocator
 
 
 
-def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry, result_label):
+def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, nTrades_entry, result_label):
     try:
         # Get user inputs
         initial_balance = float(balanceEntry.get())
+        winrate = float(winrateEntry.get())
         risk_percent = float(riskEntry.get())
         rr_ratio = float(rrEntry.get())
         num_trades = int(nTrades_entry.get())
@@ -30,7 +32,7 @@ def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry, resul
         # Loop through the number of trades
         for trade in range(num_trades):
             risk_amount = balance * (risk_percent / 100)
-            if random.random() > 0.5:
+            if random.random() <= winrate:
                 balance += (risk_amount * rr_ratio)
                 wins += 1
             else:
@@ -52,12 +54,12 @@ def probability_simulator(balanceEntry, riskEntry, rrEntry, nTrades_entry, resul
         max_drawdown *= 100
 
         # Calculate results
-        win_rate = (wins / num_trades) * 100
+        # win_rate = (wins / num_trades) * 100
         total_return = ((balance - initial_balance) / initial_balance) * 100
 
         # Display results in a messagebox
-        messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
-        result_label.configure(text=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nWin Rate: {win_rate:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
+        messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
+        result_label.configure(text=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nMax Drawdown: {max_drawdown:.2f}%")
 
         # return balance_history
         return balance_history
@@ -73,7 +75,7 @@ def update_plot(plotFrame, balance_history):
         widget.destroy()
 
     plt.style.use("dark_background")
-    plt.rcParams["figure.figsize"] = (10, 4)
+    # plt.rcParams["figure.figsize"] = (10, 4)
     fig = Figure()
     ax = fig.add_subplot(111)
     ax.plot(balance_history)  # Example data
@@ -127,4 +129,17 @@ def update_plot(plotFrame, balance_history):
     canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
     canvas.get_tk_widget().pack(fill="both", expand=True)
     canvas.draw()
+
+
+# def save_plot():
+#        # Ask the user for a file location to save the plot
+#        file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG Files", "*.png"), ("All Files", "*.*")])
+#        if file_path:
+#            # Save the current plot to the chosen file
+#            plt.savefig(file_path)    
+#
+#
+
+
+
 
