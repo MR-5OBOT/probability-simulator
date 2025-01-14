@@ -43,6 +43,7 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, nTrade
         # Calculate Max Drawdown from Balance History
         max_drawdown = 0
         peak_balance = balance_history[0]
+        
 
         for bal in balance_history:
             if bal > peak_balance:
@@ -69,6 +70,83 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, nTrade
         result_label.configure(text="Error: Please enter valid numbers.")
 
 
+#------- simulation based on risk model --------#
+def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label):
+    try:
+        # Get user inputs
+        initial_balance = float(balanceEntry.get())
+        winrate = float(winrateEntry.get())
+        risk_percent = float(riskEntry.get())
+        rr_ratio = float(rrEntry.get())
+        consecutive_L_treshold = float(consecutive_LossesEntry.get())
+        # risk_reducer = float(risk_reducerEntry.get())
+        num_trades = int(nTrades_entry.get())
+
+        # Validate inputs
+        if initial_balance <= 0 or risk_percent <= 0 or rr_ratio <= 0 or num_trades <= 0:
+            result_label.configure(text="Error: All inputs must be positive numbers.")
+            messagebox.showinfo(message="Error: All inputs must be positive numbers.")
+            return
+
+        # Initialize variables
+        balance = initial_balance
+        balance_history = [initial_balance]
+        wins = 0
+        consecutive_losses = 0
+        max_consecutive_losses = 0
+
+
+
+        # Loop through the number of trades
+        for trade in range(10):
+            risk_amount = balance * (risk_percent / 100)
+            if random.random() <= winrate:
+                balance += (risk_amount * rr_ratio)
+                wins += 1
+                consecutive_losses = 0
+            else:
+                balance -= risk_amount
+                consecutive_losses += 1
+                max_consecutive_losses = max(max_consecutive_losses, consecutive_losses)
+
+                # reduce risk after x consecutive_losses
+                if consecutive_losses >= consecutive_L_treshold:
+                    risk_amount = risk_amount / 2 # reduce risk by half
+                    print(risk_amount)
+
+            balance_history.append(balance)
+            print(balance_history)
+
+        # Calculate Max Drawdown from Balance History
+        max_drawdown = 0
+        peak_balance = balance_history[0]
+
+        for bal in balance_history:
+            if bal > peak_balance:
+                peak_balance = bal
+            drawdown = (peak_balance - bal) / peak_balance
+            max_drawdown = max(max_drawdown, drawdown)
+
+        # Convert to percentage
+        max_drawdown *= 100
+
+        # Calculate results
+        # win_rate = (wins / num_trades) * 100
+        total_return = ((balance - initial_balance) / initial_balance) * 100
+
+        # Display results in a messagebox
+        messagebox.showinfo(message=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nMax Drawdown: {max_drawdown:.2f}%\nConsecutive Losses: {max_consecutive_losses}")
+        result_label.configure(text=f"Final Balance: ${balance:.2f}\nTotal Return: {total_return:.2f}%\nMax Drawdown: {max_drawdown:.2f}%\nConsecutive Losses: {max_consecutive_losses}")
+
+        # return balance_history
+        return balance_history
+
+    except ValueError:
+        messagebox.showerror(message="Error: Please enter valid numbers.")
+        result_label.configure(text="Error: Please enter valid numbers.")
+
+
+#------------ ploting -------------#
 def update_plot(plotFrame, balance_history):
     # Clear the previous plot
     for widget in plotFrame.winfo_children():
@@ -79,7 +157,7 @@ def update_plot(plotFrame, balance_history):
     fig = Figure()
     ax = fig.add_subplot(111)
     ax.plot(balance_history)  # Example data
-    ax.set_title("Simulation Results (random generation)", color='grey', fontsize=18, loc='center', pad=20)
+    ax.set_title("Simulation Results", color='grey', fontsize=18, loc='center', pad=20)
     # ax.set_xlabel("Number of Trades")
     # ax.set_ylabel("Account Balance")
     # ax.grid(color='#1E1E1E', linestyle='--', linewidth=1)

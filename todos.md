@@ -2,7 +2,7 @@
 
 - [x] finish graph styling
 - [x] recheck all formulas
-- [ ] figure out if i can make teh app have tabs or just inputs for all types of sims
+- [ ] figure out if i can make the app have tabs or just inputs for all types of sims
 - [ ] fix "save_picture()" func
 
 .
