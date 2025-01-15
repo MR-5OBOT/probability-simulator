@@ -1,2 +1,3 @@
 matplotlib
 customtkinter
+cx_Freeze

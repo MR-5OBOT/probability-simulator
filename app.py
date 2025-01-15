@@ -1,3 +1,5 @@
+import os
+import sys
 import tkinter as tk
 from tkinter import ttk
 # from tkinter import messagebox
@@ -6,6 +8,7 @@ from tkinter import ttk
 # from matplotlib.figure import Figure
 
 from custom_func.sim_func import probability_simulator, update_plot, complex_simulator
+
 
 # finctions to Calculate and lot results
 def plot_tab1():
@@ -21,8 +24,7 @@ app = tk.Tk()
 style = ttk.Style(app) # Create a style object
 style.theme_use("clam")
 
-app.tk.call('source', './themes/Forest-ttk-theme/forest-dark.tcl') # Load custom theme
-# app.tk.call('source', './themes/Forest-ttk-theme/forest-light.tcl') # Load custom theme
+app.tk.call('source', './src/themes/Forest-ttk-theme/forest-dark.tcl') # Load custom theme
 style.theme_use('forest-dark') # Set custom theme
 
 app.title("Traders Toolbox")
@@ -149,3 +151,16 @@ tab2.grid_columnconfigure(1, weight=1)
 
 app.mainloop()
 
+
+# # for pyinstaller to add ltc file to the build app
+# def resource_path(relative_path):
+#     """ Returns the absolute path to a resource bundled with the app. """
+#     try:
+#         # PyInstaller sets the _MEIPASS attribute in the bundled app
+#         base_path = sys._MEIPASS
+#     except Exception:
+#         # If running from source, use the current working directory
+#         base_path = os.path.abspath(".")
+#
+#     return os.path.join(base_path, relative_path)
+# app.tk.call('source', resource_path('themes/Forest-ttk-theme/forest-dark.tcl'))
