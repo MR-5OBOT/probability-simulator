@@ -161,6 +161,18 @@ def update_plot(plotFrame, balance_history):
     # ax.set_ylabel("Account Balance")
     # ax.grid(color='#1E1E1E', linestyle='--', linewidth=1)
     # ax.legend()
+    # Add a watermark
+    ax.text(
+        0.5, 0.5,               # X and Y position (relative, in axes coordinates)
+        "MR5OBOT S-SIMULATOR",         # Watermark text
+        fontsize=25,            # Font size
+        color='gray',           # Text color
+        alpha=0.15,              # Transparency (0.0 to 1.0)
+        ha='center',            # Horizontal alignment
+        va='center',            # Vertical alignment
+        rotation=10,            # Rotate text
+        transform=ax.transAxes  # Transform relative to the axes (0 to 1 range)
+        )
 
     # remove right line and top line
     ax.spines['right'].set_visible(False)
