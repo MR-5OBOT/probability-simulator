@@ -98,7 +98,7 @@ def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutiv
 
 
         # Loop through the number of trades
-        for trade in range(10):
+        for trade in range(num_trades):
             risk_amount = balance * (risk_percent / 100)
             if random.random() <= winrate:
                 balance += (risk_amount * rr_ratio)
@@ -111,11 +111,10 @@ def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutiv
 
                 # reduce risk after x consecutive_losses
                 if consecutive_losses >= consecutive_L_treshold:
-                    risk_amount = risk_amount / 2 # reduce risk by half
-                    print(risk_amount)
+                    risk_amount /= 2  # Reduce risk by 50% (adjust this factor as needed)
+
 
             balance_history.append(balance)
-            print(balance_history)
 
         # Calculate Max Drawdown from Balance History
         max_drawdown = 0

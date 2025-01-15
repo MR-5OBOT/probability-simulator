@@ -121,7 +121,7 @@ nTrades_entry_tab2.grid(column=0, row=4, sticky="ew", pady=5)
 consecutive_LossesEntry_tab2 = ttk.Spinbox(inputsLabel_tab2, from_=0, to=10)
 consecutive_LossesEntry_tab2.insert(0, "losses threshold")
 consecutive_LossesEntry_tab2.bind("<FocusIn>", lambda _: consecutive_LossesEntry_tab2.delete('0', 'end'))
-consecutive_LossesEntry_tab2.grid(column=0, row=5)
+consecutive_LossesEntry_tab2.grid(column=0, row=5, pady=5)
 
 calculateButton_tab2 = ttk.Button(inputsLabel_tab2, text="Calculate", command=plot_tab2)
 calculateButton_tab2.grid(column=0, row=6, sticky="ew", pady=5)
