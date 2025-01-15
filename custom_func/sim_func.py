@@ -5,8 +5,6 @@ from matplotlib.figure import Figure
 import random
 from tkinter import messagebox
 from tkinter import filedialog
-# from matplotlib.ticker import MaxNLocator
-
 
 
 def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, nTrades_entry, result_label):
@@ -154,7 +152,7 @@ def update_plot(plotFrame, balance_history):
     plt.style.use("dark_background")
     # plt.rcParams["figure.figsize"] = (10, 4)
     fig = Figure()
-    ax = fig.add_subplot(111)
+    ax = fig.add_subplot()
     ax.plot(balance_history)  # Example data
     ax.set_title("Simulation Results", color='grey', fontsize=18, loc='center', pad=20)
     # ax.set_xlabel("Number of Trades")
@@ -218,17 +216,5 @@ def update_plot(plotFrame, balance_history):
     canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
     canvas.get_tk_widget().pack(fill="both", expand=True)
     canvas.draw()
-
-
-# def save_plot():
-#        # Ask the user for a file location to save the plot
-#        file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG Files", "*.png"), ("All Files", "*.*")])
-#        if file_path:
-#            # Save the current plot to the chosen file
-#            plt.savefig(file_path)    
-#
-#
-
-
 
 

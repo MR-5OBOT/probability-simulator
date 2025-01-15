@@ -127,10 +127,10 @@ calculateButton_tab2 = ttk.Button(inputsLabel_tab2, text="Calculate", command=pl
 calculateButton_tab2.grid(column=0, row=6, sticky="ew", pady=5)
 
 separator_tab2 = ttk.Separator(inputsLabel_tab2, orient="horizontal")
-separator_tab2.grid(column=0, row=7, sticky="nsew", pady=5)
+separator_tab2.grid(column=0, row=8, sticky="nsew", pady=5)
 
 result_frame_tab2 = ttk.LabelFrame(inputsLabel_tab2, text="Results")
-result_frame_tab2.grid(column=0, row=8, sticky="nsew")
+result_frame_tab2.grid(column=0, row=9, sticky="nsew")
 result_label_tab2 = ttk.Label(result_frame_tab2, text="", anchor="center")
 result_label_tab2.pack(expand=True, fill="both", padx=5, pady=5)
 
