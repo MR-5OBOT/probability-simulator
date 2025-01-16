@@ -23,6 +23,7 @@ This application helps traders simulate probability-based outcomes to enhance th
 - [x] Plot the results of the simulations in a graph inside the app
 - [x] Fix the position of the widgets in the app
 - [ ] Add a feature to save the results of the simulations to a file
+- [ ] make a windows .EXE version
 
 ## Dependencies
 
