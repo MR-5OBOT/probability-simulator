@@ -24,7 +24,7 @@ The app allows users to simulate two types of probability models to help traders
 
 ## How to Use
 
-1. Download the executable from the [Releases page](https://github.com/MR-5OBOT/proability-simulator/releases).
+1. Download the executable from the [Releases page](https://github.com/MR-5OBOT/probability-simulator/releases).
 2. Run the executable to start the application.
 
 ## Features
