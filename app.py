@@ -17,17 +17,8 @@ def resource_path(relative_path):
     except Exception:
         # If running from source, use the current working directory
         base_path = os.path.abspath(".")
-    
     return os.path.join(base_path, relative_path)
 
-# finctions to Calculate and lot results
-def plot_tab1():
-    balance_history = probability_simulator(balanceEntry_tab1, winrateEntry_tab1, riskEntry_tab1, rrEntry_tab1, nTrades_entry_tab1, result_label_tab1)
-    update_plot(plotFrame_tab1, balance_history)
-
-def plot_tab2():
-    balance_history = complex_simulator(balanceEntry_tab2, winrateEntry_tab2, riskEntry_tab2, rrEntry_tab2, consecutive_LossesEntry_tab2, nTrades_entry_tab2, result_label_tab2)
-    update_plot(plotFrame_tab2, balance_history)
 
 #----- Main App -----#
 app = tk.Tk()
@@ -53,6 +44,14 @@ tab2 = ttk.Frame(notebook)
 notebook.add(tab1, text="Probability Simulator")
 notebook.add(tab2, text="Complex Simulator")
 
+# finctions to Calculate and lot results
+def plot_tab1():
+    balance_history = probability_simulator(balanceEntry_tab1, winrateEntry_tab1, riskEntry_tab1, rrEntry_tab1, nTrades_entry_tab1, result_label_tab1)
+    update_plot(plotFrame_tab1, balance_history)
+
+def plot_tab2():
+    balance_history = complex_simulator(balanceEntry_tab2, winrateEntry_tab2, riskEntry_tab2, rrEntry_tab2, consecutive_LossesEntry_tab2, nTrades_entry_tab2, result_label_tab2)
+    update_plot(plotFrame_tab2, balance_history)
 
 #------------------------------- tab1 ---------------------------------------#
 #----- Tab1 input frame -----#
@@ -163,17 +162,3 @@ tab2.grid_columnconfigure(1, weight=1)
 # toggle dark and light mode
 
 app.mainloop()
-
-
-# # for pyinstaller to add ltc file to the build app
-# def resource_path(relative_path):
-#     """ Returns the absolute path to a resource bundled with the app. """
-#     try:
-#         # PyInstaller sets the _MEIPASS attribute in the bundled app
-#         base_path = sys._MEIPASS
-#     except Exception:
-#         # If running from source, use the current working directory
-#         base_path = os.path.abspath(".")
-#
-#     return os.path.join(base_path, relative_path)
-# app.tk.call('source', resource_path('themes/Forest-ttk-theme/forest-dark.tcl'))
