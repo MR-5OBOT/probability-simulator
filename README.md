@@ -1,10 +1,10 @@
 # Probability Simulator
 
-This application helps traders simulate probability-based outcomes to enhance their trading strategies.
-
-## How to Use
+This application helps traders simulate probability-based outcomes to enhance their trading strategies. It provides two types of simulations and the ability to visualize the results in graphs. This tool is designed to support traders in making data-driven decisions.
 
 ![image](https://github.com/user-attachments/assets/bcf145f6-e379-4ffd-a340-ef53739623fd)
+
+## How to Use
 
 1. Download the executable from the [Releases page](https://github.com/MR-5OBOT/proability-simulator/releases).
 2. Run the executable to start the application.
