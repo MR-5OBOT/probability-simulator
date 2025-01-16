@@ -1,41 +1,39 @@
-# Trading tool collection to help you trade better
+# Probability Simulator
+
+This application helps traders simulate probability-based outcomes to enhance their trading strategies. It provides two types of simulations and the ability to visualize the results in graphs. This tool is designed to support traders in making data-driven decisions.
+
+## How to Use
+
+1. Download the executable from the [Releases page](https://github.com/your-username/your-repo/releases).
+2. Run the executable to start the application.
 
 ## Features
 
-- [ ] **tow types of simulations (random & winrate based)**
-
-## How to use
-
-1. Clone the repository or download the zip file
-
-```bash
-git clone https://github.com/MR-5OBOT/probability-simulator.git
-```
-
-2. Make sure the app file is executable
-
-```bash
-chmod +x app
-```
-
-3. Install requirements
-
-```bash
-pip intstall -r requirements
-```
-
-4. Run the app file
-
-```python
-python3 app.py
-```
+- **Simulate Probability Models**: Simulate different probability scenarios for trading strategies.
+- **Graphs**: View simulation results in graphical formats (charts and graphs).
+- **Multiple Simulations**: Two types of simulations are available for various trading strategies.
+- **Save Results**: Save the results of your simulations for later use.
 
 ### **Todos:**
 
-- [x] make the UI for the app
-- [x] make 2 tabs for the 2 types of simulations
-- [x] plot the results of the simulations in a graph inside the app
-- [x] fix position of the widgets in the app
-- [ ] add a feature to save the results of the simulations to a file
+- [x] Make the UI for the app
+- [x] Make 2 tabs for the 2 types of simulations
+- [x] Plot the results of the simulations in a graph inside the app
+- [x] Fix the position of the widgets in the app
+- [ ] Add a feature to save the results of the simulations to a file
 
-.
+## Dependencies
+
+To run this app, you need the following Python packages:
+
+- `Python 3.x`
+- `Tkinter` (for GUI)
+- `matplotlib` (for graph plotting)
+- `numpy` (for mathematical operations)
+- `pandas` (for data manipulation)
+
+You can install the necessary packages with the following command:
+
+```bash
+pip install -r requirements.txt
+```
