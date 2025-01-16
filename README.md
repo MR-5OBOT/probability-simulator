@@ -2,7 +2,7 @@
 
 This application helps traders simulate probability-based outcomes to enhance their trading strategies.
 
-<!--![image](https://github.com/user-attachments/assets/bcf145f6-e379-4ffd-a340-ef53739623fd)-->
+![image](https://github.com/user-attachments/assets/bcf145f6-e379-4ffd-a340-ef53739623fd)
 ![image](https://github.com/user-attachments/assets/6cb78f16-54e4-49a8-936a-a3302cdf90df)
 
 
