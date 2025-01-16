@@ -8,7 +8,7 @@ from tkinter import ttk
 # from matplotlib.figure import Figure
 from resources.custom_func.sim_func import probability_simulator, update_plot, complex_simulator
 
-# Function to get the correct resource path
+# Function to get the correct resource path (for pyinstaller)
 def resource_path(relative_path):
     """ Returns the absolute path to a resource bundled with the app. """
     try:
@@ -32,7 +32,6 @@ app.tk.call('source', theme_path)  # Load custom theme
 # app.tk.call('source', './resources/Forest-ttk-theme/forest-dark.tcl') # Load custom theme
 style.theme_use('forest-dark') # Set custom theme
 # style.theme_use("clam")
-
 
 notebook = ttk.Notebook(app)
 notebook.pack(fill="both", expand=True)
@@ -159,6 +158,5 @@ tab2.grid_columnconfigure(1, weight=1)
 
 
 
-# toggle dark and light mode
 
 app.mainloop()

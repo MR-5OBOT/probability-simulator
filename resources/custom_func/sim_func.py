@@ -93,8 +93,6 @@ def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutiv
         consecutive_losses = 0
         max_consecutive_losses = 0
 
-
-
         # Loop through the number of trades
         for _ in range(num_trades):
             risk_amount = balance * (risk_percent / 100)
@@ -110,7 +108,6 @@ def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutiv
                 # reduce risk after x consecutive_losses
                 if consecutive_losses >= consecutive_L_treshold:
                     risk_amount /= 2  # Reduce risk by 50% (adjust this factor as needed)
-
 
             balance_history.append(balance)
 
@@ -210,7 +207,6 @@ def update_plot(plotFrame, balance_history):
     #
     # control ticks spacing make it dynamic
     # ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-
 
     # add canvas to the plotFrame
     canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
