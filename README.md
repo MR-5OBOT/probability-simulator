@@ -1,6 +1,6 @@
 # Probability Simulator
 
-This application helps traders simulate probability-based outcomes to enhance their trading strategies. It provides two types of simulations and the ability to visualize the results in graphs. This tool is designed to support traders in making data-driven decisions.
+This application helps traders simulate probability-based outcomes to enhance their trading strategies.
 
 ![image](https://github.com/user-attachments/assets/bcf145f6-e379-4ffd-a340-ef53739623fd)
 
