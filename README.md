@@ -4,7 +4,9 @@ This application helps traders simulate probability-based outcomes to enhance th
 
 ## How to Use
 
-1. Download the executable from the [Releases page](https://github.com/your-username/your-repo/releases).
+![image](https://github.com/user-attachments/assets/bcf145f6-e379-4ffd-a340-ef53739623fd)
+
+1. Download the executable from the [Releases page](https://github.com/MR-5OBOT/proability-simulator/releases).
 2. Run the executable to start the application.
 
 ## Features
