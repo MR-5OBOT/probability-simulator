@@ -13,7 +13,7 @@ def resource_path(relative_path):
     """ Returns the absolute path to a resource bundled with the app. """
     try:
         # PyInstaller sets the _MEIPASS attribute in the bundled app
-        base_path = sys._MEIPASS
+        base_path = sys._MEIPASS2
     except Exception:
         # If running from source, use the current working directory
         base_path = os.path.abspath(".")
