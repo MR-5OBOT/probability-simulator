@@ -1,2 +1,3 @@
 matplotlib
 customtkinter
+pyinstaller # optional for building
