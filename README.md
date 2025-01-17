@@ -4,32 +4,40 @@ This Python application enables traders to evaluate the performance of various t
 
 **Key Features:**
 
-* Simulate two types of probability models.
-* Analyze factors like Total returns and max drawdown.
-* Visualize performance results over time (graphs).
+- Simulate two types of probability models.
+- Analyze factors like Total returns and max drawdown.
+- Visualize performance results over time (graphs).
 
 ## How to Use
 
-1. **Clone the Repository** 
-    Run the following command to clone the repository: 
-    ```bash
-    git clone [https://github.com/MR-5OBOT/probability-simulator.git]
-    ```
+1. **Clone the Repository**
+
+   Run the following command to clone the repository:
+
+   ```bash
+   git clone [https://github.com/MR-5OBOT/probability-simulator.git]
+   ```
 
 2. **Navigate to the Project Directory**
-    Move into the project directory:
-    ```bash
-    cd probability-simulator
-    ```
+
+   Move into the project directory:
+
+   ```bash
+   cd probability-simulator
+   ```
 
 3. **Install Dependencies**
-    Install required dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
+
+   Install required dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 4. **Run the Application**
-    Execute the app with:
-    ```bash
-    python simulator.py
-    ```
+
+   Execute the app with:
+
+   ```bash
+   python simulator.py
+   ```
