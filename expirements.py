@@ -5,11 +5,11 @@ from tkinter import ttk
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # from matplotlib.figure import Figure
 
-from custom_func.sim_func import probability_simulator, update_plot
+from resources.custom_func.sim_func import probability_simulator, update_plot
 
 
 def calculate_and_plot():
-    balance_history = probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, nTrades_entry, result_label)
+    balance_history = probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, nTrades_entry, consecutive_LossesEntry, result_label)
     update_plot(plotFrame, balance_history)
 
 #----- Main App -----#
@@ -17,7 +17,7 @@ app = tk.Tk()
 style = ttk.Style(app) # Create a style object
 style.theme_use("clam")
 
-app.tk.call('source', './themes/Forest-ttk-theme/forest-dark.tcl') # Load custom theme
+app.tk.call('source', './resources/Forest-ttk-theme/forest-dark.tcl') # Load custom theme
 # app.tk.call('source', './themes/Forest-ttk-theme/forest-light.tcl') # Load custom theme
 style.theme_use('forest-dark') # Set custom theme
 
@@ -63,14 +63,35 @@ nTrades_entry.insert(0, 'total trades')
 nTrades_entry.bind("<FocusIn>", lambda _: nTrades_entry.delete('0', 'end'))
 nTrades_entry.grid(column=0, row=4, sticky="ew", pady=5)
 
+consecutive_LossesEntry = ttk.Spinbox(inputsLabel, from_=0, to=1000, increment=1)
+consecutive_LossesEntry.insert(0, 'losses treshold')
+consecutive_LossesEntry.bind("<FocusIn>", lambda _: consecutive_LossesEntry.delete('0', 'end'))
+consecutive_LossesEntry.grid(column=0, row=5, sticky="ew", pady=5)
+consecutive_LossesEntry.config(state="disabled")
+
+# the function that will be triggered when the checkbox is toggled
+def risk_reducer_func():
+    # Check if the Checkbutton is checked
+    if check_var.get() == 1:  # If checked
+        consecutive_LossesEntry.config(state='normal')  # Enable entry2
+    else:  # If unchecked
+        consecutive_LossesEntry.config(state='disabled')  # Disable entry2
+
+# Variable for Checkbutton state
+check_var = tk.IntVar()
+
+# Create Checkbutton and place it inside the LabelFrame
+risk_reducerbutton = ttk.Checkbutton(inputsLabel, text="Risk Reducer", variable=check_var, command=risk_reducer_func)
+risk_reducerbutton.grid(column=0, row=6, pady=5)
+
 calculateButton = ttk.Button(inputsLabel, text="Calculate", command=calculate_and_plot)
-calculateButton.grid(column=0, row=5, sticky="ew", pady=5)
+calculateButton.grid(column=0, row=7, sticky="ew", pady=5)
 
 separator = ttk.Separator(inputsLabel, orient="horizontal")
-separator.grid(column=0, row=6, sticky="nsew", pady=5)
+separator.grid(column=0, row=8, sticky="nsew", pady=5)
 
 result_frame = ttk.LabelFrame(inputsLabel, text="Results")
-result_frame.grid(column=0, row=7, sticky="nsew")
+result_frame.grid(column=0, row=9, sticky="nsew")
 result_label = ttk.Label(result_frame, text="", anchor="center")
 result_label.pack(expand=True, fill="both", padx=5, pady=5)
 

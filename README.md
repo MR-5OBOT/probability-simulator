@@ -5,7 +5,6 @@ This application helps traders simulate probability-based outcomes to enhance th
 ![image](https://github.com/user-attachments/assets/bcf145f6-e379-4ffd-a340-ef53739623fd)
 ![image](https://github.com/user-attachments/assets/6cb78f16-54e4-49a8-936a-a3302cdf90df)
 
-
 ## How the Simulations Work
 
 The app allows users to simulate two types of probability models to help traders assess different strategies based on historical data and user inputs.
@@ -42,8 +41,9 @@ The app allows users to simulate two types of probability models to help traders
 - [x] Make 2 tabs for the 2 types of simulations
 - [x] Plot the results of the simulations in a graph inside the app
 - [x] Fix the position of the widgets in the app
+- [x] make a windows .EXE version
 - [ ] Add a feature to save the results of the simulations to a file
-- [ ] make a windows .EXE version
+- [ ] add a button for risk reducer (on, off)
 
 ## Dependencies
 
@@ -52,8 +52,8 @@ To run this app, you need the following Python packages:
 - `Python 3.x`
 - `Tkinter` (for GUI)
 - `matplotlib` (for graph plotting)
-- `numpy` (for mathematical operations)
-- `pandas` (for data manipulation)
+  <!--- `numpy` (for mathematical operations)-->
+  <!--- `pandas` (for data manipulation)-->
 
 You can install the necessary packages with the following command:
 
