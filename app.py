@@ -1,5 +1,3 @@
-import os
-import sys
 import tkinter as tk
 from tkinter import ttk
 # from tkinter import messagebox
@@ -8,17 +6,6 @@ from tkinter import ttk
 # from matplotlib.figure import Figure
 from resources.custom_func.sim_func import probability_simulator, update_plot, complex_simulator
 
-# Function to get the correct resource path (for pyinstaller)
-def resource_path(relative_path):
-    """ Returns the absolute path to a resource bundled with the app. """
-    try:
-        # PyInstaller sets the _MEIPASS attribute in the bundled app
-        base_path = sys._MEIPASS2
-    except Exception:
-        # If running from source, use the current working directory
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
-
 
 #----- Main App -----#
 app = tk.Tk()
@@ -26,10 +13,9 @@ style = ttk.Style(app) # Create a style object
 app.title("Traders Toolbox")
 app.geometry("1200x650") # Set window size dynamically
 
-# Load the custom theme using resource_path to ensure it works in the bundled app 
-theme_path = resource_path('./resources/Forest-ttk-theme/forest-dark.tcl')
-app.tk.call('source', theme_path)  # Load custom theme
-# app.tk.call('source', './resources/Forest-ttk-theme/forest-dark.tcl') # Load custom theme
+# theme_path = resource_path('./resources/Forest-ttk-theme/forest-dark.tcl')
+# app.tk.call('source', theme_path)  # Load custom theme
+app.tk.call('source', './resources/Forest-ttk-theme/forest-dark.tcl') # Load custom theme
 style.theme_use('forest-dark') # Set custom theme
 # style.theme_use("clam")
 
@@ -154,7 +140,6 @@ plotFrame_tab2.pack(expand=True, fill="both", side="right")
 # Configure grid weights for responsiveness
 tab2.grid_rowconfigure(0, weight=1) 
 tab2.grid_columnconfigure(1, weight=1)
-
 
 
 

@@ -7,7 +7,7 @@ from tkinter import messagebox
 # from tkinter import filedialog
 
 
-def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, nTrades_entry, consecutive_LossesEntry, result_label):
+def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, nTrades_entry, result_label):
     try:
         # Get user inputs
         initial_balance = float(balanceEntry.get())
@@ -15,15 +15,6 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, nTrade
         risk_percent = float(riskEntry.get())
         rr_ratio = float(rrEntry.get())
         num_trades = int(nTrades_entry.get())
-        consecutive_Losses_treshold = consecutive_LossesEntry.get().strip()
-
-        consecutive_Losses_converted = None
-        
-        # Process input1: only convert if not empty
-        if consecutive_Losses_treshold == '':
-                consecutive_Losses_converted = None
-        else:
-            consecutive_Losses_converted = float(consecutive_Losses_treshold)
 
         # Validate inputs
         if initial_balance <= 0 or risk_percent <= 0 or rr_ratio <= 0 or num_trades <= 0:
@@ -40,7 +31,7 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, nTrade
         # Loop through the number of trades
         for _ in range(num_trades):
             risk_amount = balance * (risk_percent / 100)
-            if random.random() <= winrate:
+            if random.random() <= winrate: # random generation for each trade based on x winrate
                 balance += (risk_amount * rr_ratio)
                 wins += 1
                 consecutive_Losses = 0
@@ -48,18 +39,12 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, nTrade
                 balance -= risk_amount
                 consecutive_Losses += 1
 
-            # check for consecutive_Losses treshold
-            if consecutive_Losses_converted is not None:
-                if consecutive_Losses_converted >= consecutive_Losses:
-                    risk_amount /= 2 # reduce risk by half of the normal
-
             balance_history.append(balance)
 
         # Calculate Max Drawdown from Balance History
         max_drawdown = 0
         peak_balance = balance_history[0]
         
-
         for bal in balance_history:
             if bal > peak_balance:
                 peak_balance = bal
