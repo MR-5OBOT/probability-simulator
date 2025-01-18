@@ -31,28 +31,36 @@ def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutiv
         consecutive_losses = 0
         max_consecutive_losses = 0
 
-        # Loop through the number of trades
-        for _ in range(num_trades):
-            risk_amount = balance * (risk_percent / 100)
+        reduced_risk_active = False  # Track if risk reduction is active
+
+        for trade in range(num_trades):
+            # Calculate the risk amount
+            if reduced_risk_active:
+                risk_amount = balance * (risk_percent / 100) / 2  # Reduced risk
+            else:
+                risk_amount = balance * (risk_percent / 100)  # Normal risk
+
+            # Simulate trade outcome
             if random.random() <= winrate:
                 balance += (risk_amount * rr_ratio)
                 wins += 1
                 consecutive_losses = 0
+                reduced_risk_active = False  # Reset risk reduction on a win
             else:
                 balance -= risk_amount
                 consecutive_losses += 1
                 max_consecutive_losses = max(max_consecutive_losses, consecutive_losses)
 
+            # Check for consecutive losses threshold
             if consecutive_L_treshold:  # Only reduce risk if the input is not empty
                 try:
-                    threshold = int(consecutive_L_treshold)  # Try to convert to integer
+                    threshold = int(consecutive_L_treshold)
                     if consecutive_losses >= threshold:
-                        risk_amount /= 2  # Reduce risk by 50%
-                    elif consecutive_losses == 0:
-                        risk_amount = balance * (risk_percent / 100)  # Reset risk amount
+                        reduced_risk_active = True  # Activate risk reduction
                 except ValueError:
                     pass  # If conversion fails, don't adjust risk
 
+            # Append the current balance to history
             balance_history.append(balance)
 
         # Calculate Max Drawdown from Balance History
@@ -88,22 +96,22 @@ def update_plot(plotFrame, balance_history):
         widget.destroy()
 
     plt.style.use("dark_background")
-    # plt.rcParams["figure.figsize"] = (10, 4)
     fig = Figure()
     ax = fig.add_subplot()
     ax.plot(balance_history)  # Example data
-    ax.set_title("Simulation Results", color='grey', fontsize=18, loc='center', pad=20)
-    # ax.set_xlabel("Number of Trades")
-    # ax.set_ylabel("Account Balance")
-    # ax.grid(color='#1E1E1E', linestyle='--', linewidth=1)
+    ax.set_title("Simulation Results", color='grey', fontsize=20, loc='center', pad=15)
+    ax.set_xlabel("Number of Trades")
+    ax.set_ylabel("Account Balance")
+    ax.grid(color='#161616', linestyle='--', linewidth=0.5, axis="both")
     # ax.legend()
+
     # Add a watermark
     ax.text(
         0.5, 0.5,               # X and Y position (relative, in axes coordinates)
-        "MR5OBOT S-SIMULATOR",         # Watermark text
-        fontsize=25,            # Font size
+        "@MR5OBOT",             # Watermark text
+        fontsize=30,            # Font size
         color='gray',           # Text color
-        alpha=0.15,              # Transparency (0.0 to 1.0)
+        alpha=0.12,             # Transparency (0.0 to 1.0)
         ha='center',            # Horizontal alignment
         va='center',            # Vertical alignment
         rotation=10,            # Rotate text
@@ -118,10 +126,16 @@ def update_plot(plotFrame, balance_history):
     #--------- Theming --------------#
     # # change balance_history line color
     # ax.lines[0].set_color("#08134E")
-    #
+    # change x y ticks style
+    ax.tick_params(axis='x', direction='inout', length=6, width=2)
+    ax.tick_params(axis='y', direction='inout', length=6, width=2)
+    # change x y label line width
+    ax.spines['bottom'].set_linewidth(2)
+    ax.spines['left'].set_linewidth(2)
+
     # # change x y line color
-    # ax.spines['bottom'].set_color('#217346')
-    # ax.spines['left'].set_color('#217346')
+    # ax.spines['bottom'].set_color('#8DD3C7')
+    # ax.spines['left'].set_color('#8DD3C7')
     # # ax.spines['top'].set_color('#4E83A3')
     # # ax.spines['right'].set_color('#4E83A3')
     #
@@ -129,22 +143,13 @@ def update_plot(plotFrame, balance_history):
     # ax.tick_params(axis='x', colors='grey')
     # ax.tick_params(axis='y', colors='grey')
     #
-    # # change x y ticks style
-    # ax.tick_params(axis='x', direction='inout', length=6, width=2)
-    # ax.tick_params(axis='y', direction='inout', length=6, width=2)
-    #
     # # change x y label color
     # ax.xaxis.label.set_color('white')
     # ax.yaxis.label.set_color('white')
     #
-       #
     # # change x y label line style
     # # ax.spines['bottom'].set_linestyle('--')
     # # ax.spines['left'].set_linestyle('--')
-    #
-    # # change x y label line width
-    # ax.spines['bottom'].set_linewidth(2)
-    # ax.spines['left'].set_linewidth(2)
     #
     # control ticks spacing make it dynamic
     # ax.xaxis.set_major_locator(MaxNLocator(integer=True))
