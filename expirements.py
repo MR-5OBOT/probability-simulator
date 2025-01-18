@@ -77,7 +77,6 @@ def risk_reducer_func():
     else:  # If unchecked
         consecutive_LossesEntry.delete(0)
         consecutive_LossesEntry.config(state='disabled')  # Disable entry2
-        # consecutive_LossesEntry.insert(0, 'losses treshold')
 
 
 # Variable for Checkbutton state
