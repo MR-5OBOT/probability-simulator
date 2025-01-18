@@ -108,10 +108,7 @@ tab1.grid_rowconfigure(0, weight=1)
 tab1.grid_columnconfigure(1, weight=1)
 
 
-# toggle dark and light mode
-
 
 
 
 app.mainloop()
-
