@@ -75,7 +75,10 @@ def risk_reducer_func():
     if check_var.get() == 1:  # If checked
         consecutive_LossesEntry.config(state='normal')  # Enable entry2
     else:  # If unchecked
+        consecutive_LossesEntry.delete(0)
         consecutive_LossesEntry.config(state='disabled')  # Disable entry2
+        # consecutive_LossesEntry.insert(0, 'losses treshold')
+
 
 # Variable for Checkbutton state
 check_var = tk.IntVar()
@@ -106,8 +109,6 @@ plotFrame.pack(expand=True, fill="both", side="right")
 # Configure grid weights for responsiveness
 tab1.grid_rowconfigure(0, weight=1) 
 tab1.grid_columnconfigure(1, weight=1)
-
-
 
 
 

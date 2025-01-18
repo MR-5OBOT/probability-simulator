@@ -89,6 +89,7 @@ def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutiv
         messagebox.showerror(message="Error: Please enter valid numbers.")
         result_label.configure(text="Error: Please enter valid numbers.")
 
+
 #------------ ploting -------------#
 def update_plot(plotFrame, balance_history):
     # Clear the previous plot

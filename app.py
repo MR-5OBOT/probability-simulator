@@ -17,8 +17,7 @@ app = tk.Tk()
 style = ttk.Style(app) # Create a style object
 style.theme_use("clam")
 
-app.tk.call('source', './resources/Forest-ttk-theme/forest-dark.tcl') # Load custom theme
-# app.tk.call('source', './themes/Forest-ttk-theme/forest-light.tcl') # Load custom theme
+app.tk.call('source', './resources/Forest-ttk-theme/forest-dark.tcl') # Load custom theme app.tk.call('source', './themes/Forest-ttk-theme/forest-light.tcl') # Load custom theme
 style.theme_use('forest-dark') # Set custom theme
 
 app.title("Traders Toolbox")
@@ -29,10 +28,10 @@ notebook.pack(fill="both", expand=True)
 
 # Create individual tabs
 tab1 = ttk.Frame(notebook)
-tab2 = ttk.Frame(notebook)
+# tab2 = ttk.Frame(notebook)
 
 notebook.add(tab1, text="Probability Simulator")
-notebook.add(tab2, text="Tab2")
+# notebook.add(tab2, text="Tab2")
 
 #----- Tab1 input frame -----#
 inputsLabel = ttk.LabelFrame(tab1, text="Simulation inputs", padding=(15, 15))
@@ -95,10 +94,6 @@ result_frame.grid(column=0, row=9, sticky="nsew")
 result_label = ttk.Label(result_frame, text="", anchor="center")
 result_label.pack(expand=True, fill="both", padx=5, pady=5)
 
-# save_pic = ttk.Button(inputsLabel, text="Save plot", command="")
-# save_pic.grid()
-
-
 #----- tab1 plot frame -----#
 plotFrame = ttk.LabelFrame(tab1, text="Plot Graph", padding=(15, 15))
 plotFrame.pack(expand=True, fill="both", side="right")
@@ -106,8 +101,6 @@ plotFrame.pack(expand=True, fill="both", side="right")
 # Configure grid weights for responsiveness
 tab1.grid_rowconfigure(0, weight=1) 
 tab1.grid_columnconfigure(1, weight=1)
-
-
 
 
 
