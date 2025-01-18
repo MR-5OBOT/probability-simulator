@@ -69,6 +69,9 @@ consecutive_LossesEntry.bind("<FocusIn>", lambda _: consecutive_LossesEntry.dele
 consecutive_LossesEntry.grid(column=0, row=5, sticky="ew", pady=5)
 consecutive_LossesEntry.config(state="disabled")
 
+separator = ttk.Separator(inputsLabel, orient="horizontal")
+separator.grid(column=0, row=6, sticky="nsew", pady=10)
+
 # the function that will be triggered when the checkbox is toggled
 def risk_reducer_func():
     # Check if the Checkbutton is checked
@@ -84,16 +87,16 @@ check_var = tk.IntVar()
 
 # Create Checkbutton and place it inside the LabelFrame
 risk_reducerbutton = ttk.Checkbutton(inputsLabel, text="Risk Reducer", variable=check_var, command=risk_reducer_func)
-risk_reducerbutton.grid(column=0, row=6, pady=5)
+risk_reducerbutton.grid(column=0, row=7, pady=5)
 
 calculateButton = ttk.Button(inputsLabel, text="Calculate", command=calculate_and_plot)
-calculateButton.grid(column=0, row=7, sticky="ew", pady=5)
+calculateButton.grid(column=0, row=8, sticky="ew", pady=5)
 
 separator = ttk.Separator(inputsLabel, orient="horizontal")
-separator.grid(column=0, row=8, sticky="nsew", pady=5)
+separator.grid(column=0, row=9, sticky="nsew", pady=5)
 
 result_frame = ttk.LabelFrame(inputsLabel, text="Results")
-result_frame.grid(column=0, row=9, sticky="nsew")
+result_frame.grid(column=0, row=10, sticky="nsew")
 result_label = ttk.Label(result_frame, text="", anchor="center")
 result_label.pack(expand=True, fill="both", padx=5, pady=5)
 
