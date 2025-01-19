@@ -31,5 +31,5 @@ This Python application enables traders to evaluate the performance of various t
 4. **Run the Application**
 
    ```bash
-   python simulator.py
+   python probability-simulator.py
    ```
