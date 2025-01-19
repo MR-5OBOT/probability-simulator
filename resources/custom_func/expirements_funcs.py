@@ -1,11 +1,14 @@
-import random
-from tkinter import messagebox
+# import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+import random
+from tkinter import messagebox
+# from tkinter import filedialog
+
 
 #------- simulation based on risk model --------#
-def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label):
+def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label):
     try:
         # Get user inputs
         initial_balance = float(balanceEntry.get())
@@ -21,6 +24,11 @@ def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutiv
             messagebox.showinfo(message="Error: All inputs must be positive numbers.")
             return
 
+        if not (0 <= winrate <= 1):
+            result_label.configure(text="Error: Win rate must be between 0 and 1.")
+            messagebox.showinfo(message="Error: Win rate must be between 0 and 1.")
+            return
+
         # Initialize variables
         balance = initial_balance
         balance_history = [initial_balance]
@@ -28,32 +36,28 @@ def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutiv
         max_consecutive_losses = 0
         wins = 0
         losses = 0
-        avg_win = 0
-        avg_loss = 0
-        wins_profits = 0 
+        wins_profits = 0
         losses_profits = 0
-
         reduced_risk_active = False  # Track if risk reduction is active
 
-        for trade in range(num_trades):
+        for _ in range(num_trades):
+            # Calculate the risk amount
             if reduced_risk_active:
-                risk_amount = balance * (risk_percent / 100) / 2 
+                risk_amount = balance * (risk_percent / 100) / 2  # Reduced risk
             else:
-                risk_amount = balance * (risk_percent / 100)
+                risk_amount = balance * (risk_percent / 100)  # Normal risk
 
             # Simulate trade outcome
             if random.random() <= winrate:
-                profit = risk_amount * rr_ratio
-                balance += profit
+                balance += (risk_amount * rr_ratio)
                 wins += 1
-                wins_profits += profit 
+                wins_profits += (risk_amount * rr_ratio)
                 consecutive_losses = 0
                 reduced_risk_active = False  # Reset risk reduction on a win
             else:
-                loss = risk_amount
-                balance -= loss
+                balance -= risk_amount
                 losses += 1
-                losses_profits += loss
+                losses_profits += risk_amount
                 consecutive_losses += 1
                 max_consecutive_losses = max(max_consecutive_losses, consecutive_losses)
 
@@ -64,9 +68,11 @@ def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutiv
                     if consecutive_losses >= threshold:
                         reduced_risk_active = True  # Activate risk reduction
                 except ValueError:
+                    # print("no consecutive losses threshold is active!")
                     pass  # If conversion fails, don't adjust risk
 
             # Append the current balance to history
+            balance = round(balance, 2) # formate balance to 2 dicimal
             balance_history.append(balance)
 
         # Calculate Max Drawdown from Balance History
@@ -80,44 +86,39 @@ def complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutiv
             max_drawdown = max(max_drawdown, drawdown)
         max_drawdown *= 100 # Convert to percentage
 
-        # Calculate total return
-        total_return = ((balance - initial_balance) / initial_balance) * 100
+        total_return = ((balance - initial_balance) / initial_balance) * 100 # total return formula
 
-        # Expected Value (EV) formula
-        actual_winrate = wins / num_trades if wins > 0 else 0
-        avg_win = wins_profits / wins if wins > 0 else 0
-        avg_loss = losses_profits / losses if losses > 0 else 0
+        # Expected Value (EV) formula:  EV=(Win Rate×Average Win)−(Loss Rate×Average Loss)
+        actual_winrate = wins / num_trades
+        avg_win = wins_profits / wins if wins > 0 else 0 # avoid division by zero
+        avg_loss = losses_profits / losses if losses > 0 else 0 # avoid division by zero
         expected_value = (actual_winrate * avg_win) - ((1 - actual_winrate) * avg_loss)
 
         # Display results in a messagebox
-        messagebox.showinfo(
-                message=(
-                f"Final Balance: ${balance:.2f}\n"
-                f"Total Return: {total_return:.2f}%\n"
-                f"Max Drawdown: {max_drawdown:.2f}%\n"
-                f"Consecutive Losses: {max_consecutive_losses}\n"
-                f"Expected Value: ${expected_value}\n"
-                )
-        )
         result_label.configure(
-                text=(
-                f"Final Balance: ${balance:.2f}\n"
+                text=f"Final Balance: ${balance:.2f}\n"
                 f"Total Return: {total_return:.2f}%\n"
                 f"Max Drawdown: {max_drawdown:.2f}%\n"
                 f"Consecutive Losses: {max_consecutive_losses}\n"
-                f"Expected Value: ${expected_value}\n"
-                )
+                f"Expected Value: ${expected_value:.2f}"
         )
-
-        return balance_history, expected_value
+        messagebox.showinfo(
+                message=f"Final Balance: ${balance:.2f}\n"
+                f"Total Return: {total_return:.2f}%\n"
+                f"Max Drawdown: {max_drawdown:.2f}%\n"
+                f"Consecutive Losses: {max_consecutive_losses}\n"
+                f"Expected Value (EV): ${expected_value:.2f}"
+        )
+        # return balance history fot update plot func()
+        return balance_history
 
     except ValueError:
         messagebox.showerror(message="Error: Please enter valid numbers.")
         result_label.configure(text="Error: Please enter valid numbers.")
 
 
-#------------ plotting -------------#
-def update_plot(plotFrame, balance_history, expected_value):
+#------------ ploting -------------#
+def update_plot(plotFrame, balance_history):
     # Clear the previous plot
     for widget in plotFrame.winfo_children():
         widget.destroy()
@@ -125,7 +126,9 @@ def update_plot(plotFrame, balance_history, expected_value):
     plt.style.use("dark_background")
     fig = Figure()
     ax = fig.add_subplot()
-    ax.plot(balance_history)  # Example data
+    ax.plot(balance_history, label="Balance History")  # Add a label for the plot
+
+    # Customize the plot
     ax.set_title("Simulation Results", color='grey', fontsize=20, loc='center', pad=15)
     ax.grid(color='#161616', linestyle='--', linewidth=0.5, axis="both")
 
@@ -140,40 +143,25 @@ def update_plot(plotFrame, balance_history, expected_value):
         va='center',            # Vertical alignment
         rotation=10,            # Rotate text
         transform=ax.transAxes  # Transform relative to the axes (0 to 1 range)
-        )
+    )
 
-    # remove right line and top line
+    # Remove right and top lines
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
 
-    # Change x and y ticks style
-    ax.tick_params(axis='x', direction='inout', length=6, width=2)
-    ax.tick_params(axis='y', direction='inout', length=6, width=2)
-
-    # Change x and y label line width
+    # Change ticks and spines styling
+    ax.tick_params(axis='x', direction='inout', length=6, width=2, colors='grey')
+    ax.tick_params(axis='y', direction='inout', length=6, width=2, colors='grey')
     ax.spines['bottom'].set_linewidth(2)
-    ax.spines['left'].set_linewidth(2)
-
-    # Change x and y line color
     ax.spines['bottom'].set_color('grey')
+    ax.spines['left'].set_linewidth(2)
     ax.spines['left'].set_color('grey')
-
-    # Change x and y ticks color
-    ax.tick_params(axis='x', colors='grey')
-    ax.tick_params(axis='y', colors='grey')
-
-    # Add the expected value to the legend
-    ax.legend(
-        labels=[
-            f"Expected Value (EV): ${expected_value:.2f}"
-        ],
-        loc="upper left",
-        fontsize=10,
-        frameon=False,  # Remove legend box frame
-        labelcolor="grey"  # Set legend text color
-    )
 
     # Add canvas to the plotFrame
     canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
     canvas.get_tk_widget().pack(fill="both", expand=True)
     canvas.draw()
+
+    # Save the plot if needed
+    plt.savefig("Simulation")
+

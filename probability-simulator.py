@@ -5,7 +5,7 @@ from tkinter import ttk
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # from matplotlib.figure import Figure
 
-from expirements_funcs import complex_simulator, update_plot
+from resources.custom_func.sim_func import complex_simulator, update_plot
 
 
 def calculate_and_plot():

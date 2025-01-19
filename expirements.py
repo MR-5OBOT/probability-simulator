@@ -5,11 +5,15 @@ from tkinter import ttk
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # from matplotlib.figure import Figure
 
-from expirements_funcs import complex_simulator, update_plot
+from resources.custom_func.expirements_funcs import probability_simulator, update_plot
 
 
 def calculate_and_plot():
-    balance_history = complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
+    # Get balance history from the simulator
+    balance_history = probability_simulator(
+        balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label
+    )
+    # Pass both to the plot function
     update_plot(plotFrame, balance_history)
 
 #----- Main App -----#
@@ -71,7 +75,6 @@ def risk_reducer_func():
         consecutive_LossesEntry.delete(0)
         consecutive_LossesEntry.config(state='disabled')  # Disable entry2
 
-
 # Variable for Checkbutton state
 check_var = tk.IntVar()
 
@@ -103,5 +106,11 @@ app_frame.grid_rowconfigure(0, weight=1)
 app_frame.grid_columnconfigure(1, weight=1)
 
 
+# Ensure that we exit the mainloop when the window is closed
+def on_closing():
+    app.quit()
+# Set up the closing protocol
+app.protocol("WM_DELETE_WINDOW", on_closing)
 
+# run the app
 app.mainloop()
