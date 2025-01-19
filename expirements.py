@@ -21,16 +21,6 @@ style.theme_use('forest-dark') # Set custom theme
 app.title("Probability Simulator")
 app.geometry("1200x650") # Set window size dynamically
 
-# notebook = ttk.Notebook(app)
-# notebook.pack(fill="both", expand=True)
-
-# Create individual tabs
-# tab1 = ttk.Frame(notebook)
-# tab2 = ttk.Frame(notebook)
-
-# notebook.add(tab1, text="Probability Simulator")
-# notebook.add(tab2, text="Tab2")
-
 app_frame = ttk.Frame(app, padding=(5, 5))
 app_frame.pack(fill="both", expand=True)
 
