@@ -15,28 +15,28 @@ def calculate_and_plot():
 #----- Main App -----#
 app = tk.Tk()
 style = ttk.Style(app) # Create a style object
-style.theme_use("clam")
-
 app.tk.call('source', './resources/Forest-ttk-theme/forest-dark.tcl') # Load custom theme
-# app.tk.call('source', './themes/Forest-ttk-theme/forest-light.tcl') # Load custom theme
 style.theme_use('forest-dark') # Set custom theme
 
-app.title("Traders Toolbox")
+app.title("Probability Simulator")
 app.geometry("1200x650") # Set window size dynamically
 
-notebook = ttk.Notebook(app)
-notebook.pack(fill="both", expand=True)
+# notebook = ttk.Notebook(app)
+# notebook.pack(fill="both", expand=True)
 
 # Create individual tabs
-tab1 = ttk.Frame(notebook)
-tab2 = ttk.Frame(notebook)
+# tab1 = ttk.Frame(notebook)
+# tab2 = ttk.Frame(notebook)
 
-notebook.add(tab1, text="Probability Simulator")
-notebook.add(tab2, text="Tab2")
+# notebook.add(tab1, text="Probability Simulator")
+# notebook.add(tab2, text="Tab2")
+
+app_frame = ttk.Frame(app, padding=(5, 5))
+app_frame.pack(fill="both", expand=True)
 
 #----- Tab1 input frame -----#
-inputsLabel = ttk.LabelFrame(tab1, text="Simulation inputs", padding=(15, 15))
-inputsLabel.pack(side="left", padx=10)
+inputsLabel = ttk.LabelFrame(app_frame, text="Simulation inputs", padding=(15, 15))
+inputsLabel.pack(side="left", padx=5)
 
 balanceEntry = ttk.Spinbox(inputsLabel, from_=1000, to=1000000, increment=100)
 balanceEntry.insert(0, 'balance')
@@ -105,12 +105,12 @@ result_label.pack(expand=True, fill="both", padx=5, pady=5)
 
 
 #----- tab1 plot frame -----#
-plotFrame = ttk.LabelFrame(tab1, text="Plot Graph", padding=(15, 15))
-plotFrame.pack(expand=True, fill="both", side="right")
+plotFrame = ttk.LabelFrame(app_frame, text="Plot Graph", padding=(15, 15))
+plotFrame.pack(expand=True, fill="both", side="right", pady=10, padx=10)
 
 # Configure grid weights for responsiveness
-tab1.grid_rowconfigure(0, weight=1) 
-tab1.grid_columnconfigure(1, weight=1)
+app_frame.grid_rowconfigure(0, weight=1) 
+app_frame.grid_columnconfigure(1, weight=1)
 
 
 

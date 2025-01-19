@@ -101,8 +101,8 @@ def update_plot(plotFrame, balance_history):
     ax = fig.add_subplot()
     ax.plot(balance_history)  # Example data
     ax.set_title("Simulation Results", color='grey', fontsize=20, loc='center', pad=15)
-    ax.set_xlabel("Number of Trades")
-    ax.set_ylabel("Account Balance")
+    # ax.set_xlabel("Number of Trades")
+    # ax.set_ylabel("Account Balance")
     ax.grid(color='#161616', linestyle='--', linewidth=0.5, axis="both")
     # ax.legend()
 
@@ -135,14 +135,14 @@ def update_plot(plotFrame, balance_history):
     ax.spines['left'].set_linewidth(2)
 
     # # change x y line color
-    # ax.spines['bottom'].set_color('#8DD3C7')
-    # ax.spines['left'].set_color('#8DD3C7')
+    ax.spines['bottom'].set_color('grey')
+    ax.spines['left'].set_color('grey')
     # # ax.spines['top'].set_color('#4E83A3')
     # # ax.spines['right'].set_color('#4E83A3')
     #
     # # change x y ticks color
-    # ax.tick_params(axis='x', colors='grey')
-    # ax.tick_params(axis='y', colors='grey')
+    ax.tick_params(axis='x', colors='grey')
+    ax.tick_params(axis='y', colors='grey')
     #
     # # change x y label color
     # ax.xaxis.label.set_color('white')
