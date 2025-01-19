@@ -79,7 +79,7 @@ check_var = tk.IntVar()
 risk_reducerbutton = ttk.Checkbutton(inputsLabel, text="Risk Reducer", variable=check_var, command=risk_reducer_func)
 risk_reducerbutton.grid(column=0, row=7, pady=5)
 
-calculateButton = ttk.Button(inputsLabel, text="Calculate", command=calculate_and_plot)
+calculateButton = ttk.Button(inputsLabel, text="Run Simulation", command=calculate_and_plot)
 calculateButton.grid(column=0, row=8, sticky="ew", pady=5)
 
 separator = ttk.Separator(inputsLabel, orient="horizontal")
