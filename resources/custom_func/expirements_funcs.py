@@ -198,11 +198,6 @@ def update_plot(plotFrame, balance_history):
         transform=ax.transAxes  # Transform relative to the axes (0 to 1 range)
     )
 
-    # Save the figure as an image
-    save_fig = fig.savefig("simulation_results.png", dpi=300)  # Adjust DPI for higher quality if needed
-    # debuging 
-    logging.info("saving the graph")
-
     # Add canvas to the plotFrame
     canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
     canvas.get_tk_widget().pack(fill="both", expand=True)
@@ -210,5 +205,7 @@ def update_plot(plotFrame, balance_history):
 
     # debuging 
     logging.info("Ending the program.")
+
+    return fig
 
 

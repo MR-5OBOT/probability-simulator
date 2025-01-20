@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-# from tkinter import messagebox
+import logging
+from tkinter import messagebox
 # import matplotlib.pyplot as plt
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # from matplotlib.figure import Figure
@@ -14,7 +15,6 @@ def calculate_and_plot():
     # Pass both to the plot function
     update_plot(plotFrame, balance_history)
 
-#----- Main App -----#
 app = tk.Tk()
 style = ttk.Style(app) # Create a style object
 app.tk.call('source', './resources/Forest-ttk-theme/forest-dark.tcl') # Load custom theme
@@ -91,9 +91,8 @@ result_frame.grid(column=0, row=10, sticky="nsew")
 result_label = ttk.Label(result_frame, text="", anchor="center")
 result_label.pack(expand=True, fill="both", padx=5, pady=5)
 
-# save_pic = ttk.Button(inputsLabel, text="Save Results", command="save_it")
+# save_pic = ttk.Button(inputsLabel, text="Save Results", command=on_save_button_click)
 # save_pic.grid(column=0, row=11, pady=5, padx=5)
-
 
 #----- tab1 plot frame -----#
 plotFrame = ttk.LabelFrame(app_frame, text="Plot Graph", padding=(15, 15))
