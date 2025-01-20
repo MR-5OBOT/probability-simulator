@@ -124,7 +124,7 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
                 f"Consecutive Losses: {max_consecutive_losses:.2f}\n"
                 f"Average Win: ${avg_win:.2f}\n"
                 f"Average Loss: {avg_loss:.2f}\n"
-                f"Expected Value: ${expected_value:.2f}\n"
+                f"Expected Value: ${expected_value:.2f}"
                 )
         )
         result_label.configure(
@@ -135,7 +135,7 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
                 f"Consecutive Losses: {max_consecutive_losses:.2f}\n"
                 f"Average Win: ${avg_win:.2f}\n"
                 f"Average Loss: {avg_loss:.2f}\n"
-                f"Expected Value: ${expected_value:.2f}\n"
+                f"Expected Value: ${expected_value:.2f}"
                 )
         )
 
@@ -199,7 +199,7 @@ def update_plot(plotFrame, balance_history):
     )
 
     # Save the figure as an image
-    fig.savefig("simulation_results.png", dpi=300)  # Adjust DPI for higher quality if needed
+    save_fig = fig.savefig("simulation_results.png", dpi=300)  # Adjust DPI for higher quality if needed
     # debuging 
     logging.info("saving the graph")
 
@@ -210,4 +210,5 @@ def update_plot(plotFrame, balance_history):
 
     # debuging 
     logging.info("Ending the program.")
+
 

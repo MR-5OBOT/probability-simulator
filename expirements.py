@@ -10,9 +10,7 @@ from resources.custom_func.expirements_funcs import probability_simulator, updat
 
 def calculate_and_plot():
     # Get balance history from the simulator
-    balance_history = probability_simulator(
-        balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label
-    )
+    balance_history = probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
     # Pass both to the plot function
     update_plot(plotFrame, balance_history)
 
@@ -93,8 +91,8 @@ result_frame.grid(column=0, row=10, sticky="nsew")
 result_label = ttk.Label(result_frame, text="", anchor="center")
 result_label.pack(expand=True, fill="both", padx=5, pady=5)
 
-# save_pic = ttk.Button(inputsLabel, text="Save plot", command="")
-# save_pic.grid()
+# save_pic = ttk.Button(inputsLabel, text="Save Results", command="save_it")
+# save_pic.grid(column=0, row=11, pady=5, padx=5)
 
 
 #----- tab1 plot frame -----#
