@@ -1,19 +1,81 @@
 import tkinter as tk
 from tkinter import ttk
-import logging
 from tkinter import messagebox
-# import matplotlib.pyplot as plt
-# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-# from matplotlib.figure import Figure
+import logging
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
 
-from resources.custom_func.expirements_funcs import probability_simulator, update_plot
+from resources.custom_func.expirements_funcs import probability_simulator
 
 
+#------------ plotting -------------#
+def update_plot(balance_history):
+    # Clear the previous plot
+    for widget in plotFrame.winfo_children():
+        widget.destroy()
+
+    plt.style.use("dark_background")
+    fig = Figure()
+    ax = fig.add_subplot()
+    ax.plot(balance_history)  # Example data
+    #debuging
+    logging.info("plotting the performance")
+
+    ax.set_title("Simulation Results", color='grey', fontsize=20, loc='center', pad=15)
+    ax.grid(color='#161616', linestyle='--', linewidth=0.5, axis="both")
+
+    ax.set_xlabel("Trade Number", color='grey', fontsize=12)
+    ax.set_ylabel("Balance", color='grey', fontsize=12)
+
+    # Remove right and top spines
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+
+    # Change x and y ticks style
+    ax.tick_params(axis='x', direction='inout', length=6, width=2)
+    ax.tick_params(axis='y', direction='inout', length=6, width=2)
+
+    # Change x and y label line width and color
+    ax.spines['bottom'].set_linewidth(2)
+    ax.spines['left'].set_linewidth(2)
+    ax.spines['bottom'].set_color('grey')
+    ax.spines['left'].set_color('grey')
+
+    # Change x and y ticks color
+    ax.tick_params(axis='x', colors='grey')
+    ax.tick_params(axis='y', colors='grey')
+
+    # Add a watermark
+    ax.text(
+        0.5, 0.5,               # X and Y position (relative, in axes coordinates)
+        "@MR5OBOT",             # Watermark text
+        fontsize=30,            # Font size
+        color='gray',           # Text color
+        alpha=0.12,             # Transparency (0.0 to 1.0)
+        ha='center',            # Horizontal alignment
+        va='center',            # Vertical alignment
+        rotation=10,            # Rotate text
+        transform=ax.transAxes  # Transform relative to the axes (0 to 1 range)
+    )
+
+    # Add canvas to the plotFrame
+    canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
+    canvas.get_tk_widget().pack(fill="both", expand=True)
+    canvas.draw()
+
+    # debuging 
+    logging.info("Ending the program.")
+
+    return fig
+
+
+# calculate and plot Button
 def calculate_and_plot():
     # Get balance history from the simulator
     balance_history = probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
     # Pass both to the plot function
-    update_plot(plotFrame, balance_history)
+    update_plot(balance_history)
 
 # the function that will be triggered when the checkbox is toggled
 def risk_reducer_func():
