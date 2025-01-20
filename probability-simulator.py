@@ -5,11 +5,11 @@ from tkinter import ttk
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # from matplotlib.figure import Figure
 
-from resources.custom_func.sim_func import complex_simulator, update_plot
+from resources.custom_func.sim_func import probability_simulator, update_plot
 
 
 def calculate_and_plot():
-    balance_history = complex_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
+    balance_history = probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
     update_plot(plotFrame, balance_history)
 
 #----- Main App -----#
