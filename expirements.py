@@ -15,6 +15,16 @@ def calculate_and_plot():
     # Pass both to the plot function
     update_plot(plotFrame, balance_history)
 
+# the function that will be triggered when the checkbox is toggled
+def risk_reducer_func():
+    # Check if the Checkbutton is checked
+    if check_var.get() == 1:  # If checked
+        consecutive_LossesEntry.config(state='normal')  # Enable entry2
+    else:  # If unchecked
+        consecutive_LossesEntry.delete(0)
+        consecutive_LossesEntry.config(state='disabled')  # Disable entry2
+
+#------- GUI ------#
 app = tk.Tk()
 style = ttk.Style(app) # Create a style object
 app.tk.call('source', './resources/Forest-ttk-theme/forest-dark.tcl') # Load custom theme
@@ -64,18 +74,8 @@ consecutive_LossesEntry.config(state="disabled")
 # separator = ttk.Separator(inputsLabel, orient="horizontal")
 # separator.grid(column=0, row=6, sticky="nsew", pady=10)
 
-# the function that will be triggered when the checkbox is toggled
-def risk_reducer_func():
-    # Check if the Checkbutton is checked
-    if check_var.get() == 1:  # If checked
-        consecutive_LossesEntry.config(state='normal')  # Enable entry2
-    else:  # If unchecked
-        consecutive_LossesEntry.delete(0)
-        consecutive_LossesEntry.config(state='disabled')  # Disable entry2
-
 # Variable for Checkbutton state
 check_var = tk.IntVar()
-
 # Create Checkbutton and place it inside the LabelFrame
 risk_reducerbutton = ttk.Checkbutton(inputsLabel, text="Risk Reducer", variable=check_var, command=risk_reducer_func)
 risk_reducerbutton.grid(column=0, row=7, pady=5)

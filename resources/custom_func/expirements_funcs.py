@@ -148,6 +148,7 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
     #debuging
     logging.info("simulation ended.")
 
+
 #------------ plotting -------------#
 def update_plot(plotFrame, balance_history):
     # Clear the previous plot
