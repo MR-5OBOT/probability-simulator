@@ -63,8 +63,8 @@ consecutive_LossesEntry.bind("<FocusIn>", lambda _: consecutive_LossesEntry.dele
 consecutive_LossesEntry.grid(column=0, row=5, sticky="ew", pady=5)
 consecutive_LossesEntry.config(state="disabled")
 
-separator = ttk.Separator(inputsLabel, orient="horizontal")
-separator.grid(column=0, row=6, sticky="nsew", pady=10)
+# separator = ttk.Separator(inputsLabel, orient="horizontal")
+# separator.grid(column=0, row=6, sticky="nsew", pady=10)
 
 # the function that will be triggered when the checkbox is toggled
 def risk_reducer_func():

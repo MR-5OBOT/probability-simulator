@@ -1,14 +1,16 @@
-# import tkinter as tk
+import random
+from tkinter import messagebox
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-import random
-from tkinter import messagebox
-# from tkinter import filedialog
+import logging
 
 
-#------- simulation based on risk model --------#
 def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label):
+    # for debuging 
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+    logging.info("Starting simulation")
+
     try:
         # Get user inputs
         initial_balance = float(balanceEntry.get())
@@ -19,15 +21,13 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
         num_trades = int(nTrades_entry.get())
 
         # Validate inputs
-        if initial_balance <= 0 or risk_percent <= 0 or rr_ratio <= 0 or num_trades <= 0:
+        if initial_balance <= 0 or risk_percent <= 0 or rr_ratio <= 0 or num_trades <= 0 or winrate <= 0:
             result_label.configure(text="Error: All inputs must be positive numbers.")
             messagebox.showinfo(message="Error: All inputs must be positive numbers.")
+            # debuging
+            logging.error("Error: All inputs must be positive numbers.")
             return
 
-        if not (0 <= winrate <= 1):
-            result_label.configure(text="Error: Win rate must be between 0 and 1.")
-            messagebox.showinfo(message="Error: Win rate must be between 0 and 1.")
-            return
 
         # Initialize variables
         balance = initial_balance
@@ -36,30 +36,40 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
         max_consecutive_losses = 0
         wins = 0
         losses = 0
-        wins_profits = 0
+        avg_win = 0
+        avg_loss = 0
+        wins_profits = 0 
         losses_profits = 0
+
         reduced_risk_active = False  # Track if risk reduction is active
 
-        for _ in range(num_trades):
-            # Calculate the risk amount
+        for trade in range(num_trades):
             if reduced_risk_active:
-                risk_amount = balance * (risk_percent / 100) / 2  # Reduced risk
+                risk_amount = balance * (risk_percent / 100) / 2 
             else:
-                risk_amount = balance * (risk_percent / 100)  # Normal risk
+                risk_amount = balance * (risk_percent / 100)
+
+            logging.info("Calculate risk amount.")
 
             # Simulate trade outcome
             if random.random() <= winrate:
-                balance += (risk_amount * rr_ratio)
+                profit = risk_amount * rr_ratio
+                balance += profit
                 wins += 1
-                wins_profits += (risk_amount * rr_ratio)
+                wins_profits += profit 
                 consecutive_losses = 0
                 reduced_risk_active = False  # Reset risk reduction on a win
+                # debuging
+                logging.info("wining trade")
             else:
-                balance -= risk_amount
+                loss = risk_amount
+                balance -= loss
                 losses += 1
-                losses_profits += risk_amount
+                losses_profits += loss
                 consecutive_losses += 1
                 max_consecutive_losses = max(max_consecutive_losses, consecutive_losses)
+                # debuging
+                logging.info("lossing trade")
 
             # Check for consecutive losses threshold
             if consecutive_L_treshold:  # Only reduce risk if the input is not empty
@@ -67,13 +77,19 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
                     threshold = int(consecutive_L_treshold)
                     if consecutive_losses >= threshold:
                         reduced_risk_active = True  # Activate risk reduction
+                        logging.info("Reducing risk")
                 except ValueError:
-                    # print("no consecutive losses threshold is active!")
                     pass  # If conversion fails, don't adjust risk
+            # debuging
+            logging.info("risk reducer is not active!")
 
             # Append the current balance to history
-            balance = round(balance, 2) # formate balance to 2 dicimal
             balance_history.append(balance)
+            if not balance_history:
+                result_label.configure(text="Error: Simulation failed. No balance data to plot.")
+                return
+            #debuging
+            logging.info("new balance added!")
 
         # Calculate Max Drawdown from Balance History
         max_drawdown = 0
@@ -86,38 +102,53 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
             max_drawdown = max(max_drawdown, drawdown)
         max_drawdown *= 100 # Convert to percentage
 
-        total_return = ((balance - initial_balance) / initial_balance) * 100 # total return formula
+        # Calculate total return
+        total_return = ((balance - initial_balance) / initial_balance) * 100
 
-        # Expected Value (EV) formula:  EV=(Win Rate×Average Win)−(Loss Rate×Average Loss)
-        actual_winrate = wins / num_trades
-        avg_win = wins_profits / wins if wins > 0 else 0 # avoid division by zero
-        avg_loss = losses_profits / losses if losses > 0 else 0 # avoid division by zero
+        # Expected Value (EV) formula
+        actual_winrate = wins / num_trades if wins > 0 else 0
+
+        if wins + losses == num_trades:
+            avg_win = wins_profits / wins if wins > 0 else 0
+            avg_loss = losses_profits / losses if losses > 0 else 0
+
         expected_value = (actual_winrate * avg_win) - ((1 - actual_winrate) * avg_loss)
+        logging.info("starting EV calculation")
 
         # Display results in a messagebox
-        result_label.configure(
-                text=f"Final Balance: ${balance:.2f}\n"
-                f"Total Return: {total_return:.2f}%\n"
-                f"Max Drawdown: {max_drawdown:.2f}%\n"
-                f"Consecutive Losses: {max_consecutive_losses}\n"
-                f"Expected Value: ${expected_value:.2f}"
-        )
         messagebox.showinfo(
-                message=f"Final Balance: ${balance:.2f}\n"
+                message=(
+                f"Final Balance: ${balance:.2f}\n"
                 f"Total Return: {total_return:.2f}%\n"
                 f"Max Drawdown: {max_drawdown:.2f}%\n"
-                f"Consecutive Losses: {max_consecutive_losses}\n"
-                f"Expected Value (EV): ${expected_value:.2f}"
+                f"Consecutive Losses: {max_consecutive_losses:.2f}\n"
+                f"Average Win: ${avg_win:.2f}\n"
+                f"Average Loss: {avg_loss:.2f}\n"
+                f"Expected Value: ${expected_value:.2f}\n"
+                )
         )
-        # return balance history fot update plot func()
+        result_label.configure(
+                text=(
+                f"Final Balance: ${balance:.2f}\n"
+                f"Total Return: {total_return:.2f}%\n"
+                f"Max Drawdown: {max_drawdown:.2f}%\n"
+                f"Consecutive Losses: {max_consecutive_losses:.2f}\n"
+                f"Average Win: ${avg_win:.2f}\n"
+                f"Average Loss: {avg_loss:.2f}\n"
+                f"Expected Value: ${expected_value:.2f}\n"
+                )
+        )
+
         return balance_history
 
     except ValueError:
         messagebox.showerror(message="Error: Please enter valid numbers.")
         result_label.configure(text="Error: Please enter valid numbers.")
 
+    #debuging
+    logging.info("simulation ended.")
 
-#------------ ploting -------------#
+#------------ plotting -------------#
 def update_plot(plotFrame, balance_history):
     # Clear the previous plot
     for widget in plotFrame.winfo_children():
@@ -126,11 +157,33 @@ def update_plot(plotFrame, balance_history):
     plt.style.use("dark_background")
     fig = Figure()
     ax = fig.add_subplot()
-    ax.plot(balance_history, label="Balance History")  # Add a label for the plot
+    ax.plot(balance_history)  # Example data
+    #debuging
+    logging.info("plotting the performance")
 
-    # Customize the plot
     ax.set_title("Simulation Results", color='grey', fontsize=20, loc='center', pad=15)
     ax.grid(color='#161616', linestyle='--', linewidth=0.5, axis="both")
+
+    ax.set_xlabel("Trade Number", color='grey', fontsize=12)
+    ax.set_ylabel("Balance", color='grey', fontsize=12)
+
+    # Remove right and top spines
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+
+    # Change x and y ticks style
+    ax.tick_params(axis='x', direction='inout', length=6, width=2)
+    ax.tick_params(axis='y', direction='inout', length=6, width=2)
+
+    # Change x and y label line width and color
+    ax.spines['bottom'].set_linewidth(2)
+    ax.spines['left'].set_linewidth(2)
+    ax.spines['bottom'].set_color('grey')
+    ax.spines['left'].set_color('grey')
+
+    # Change x and y ticks color
+    ax.tick_params(axis='x', colors='grey')
+    ax.tick_params(axis='y', colors='grey')
 
     # Add a watermark
     ax.text(
@@ -145,23 +198,16 @@ def update_plot(plotFrame, balance_history):
         transform=ax.transAxes  # Transform relative to the axes (0 to 1 range)
     )
 
-    # Remove right and top lines
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-
-    # Change ticks and spines styling
-    ax.tick_params(axis='x', direction='inout', length=6, width=2, colors='grey')
-    ax.tick_params(axis='y', direction='inout', length=6, width=2, colors='grey')
-    ax.spines['bottom'].set_linewidth(2)
-    ax.spines['bottom'].set_color('grey')
-    ax.spines['left'].set_linewidth(2)
-    ax.spines['left'].set_color('grey')
+    # Save the figure as an image
+    fig.savefig("simulation_results.png", dpi=300)  # Adjust DPI for higher quality if needed
+    # debuging 
+    logging.info("saving the graph")
 
     # Add canvas to the plotFrame
     canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
     canvas.get_tk_widget().pack(fill="both", expand=True)
     canvas.draw()
 
-    # Save the plot if needed
-    plt.savefig("Simulation")
+    # debuging 
+    logging.info("Ending the program.")
 
