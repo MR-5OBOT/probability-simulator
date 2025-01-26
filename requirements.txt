@@ -1,3 +1,6 @@
 matplotlib
 customtkinter
-pyinstaller # optional for building
+# pyinstaller
+# kivy
+# kivy-examples
+

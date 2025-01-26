@@ -1,9 +1,9 @@
-import random
-from tkinter import messagebox
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+from tkinter import messagebox
 import logging
+import random
 
 
 def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label):
@@ -148,4 +148,76 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
     logging.info("simulation ended.")
 
 
-
+# def creat_plot(balance_history):
+#     """Function to plot the balance history"""
+#     plt.style.use("dark_background")
+#     fig = Figure()
+#     ax = fig.add_subplot()
+#     plt.plot(balance_history)
+#     # ax.plot(balance_history)  # Example data
+#     # data = probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
+#     # data = get_balance_history()
+#     # ax.plot(data, label="balance_history")  # Example data
+#     #debuging
+#     logging.info("plotting the performance")
+#
+#     ax.set_title("Simulation Results", color='grey', fontsize=20, loc='center', pad=15)
+#     ax.grid(color='#161616', linestyle='--', linewidth=0.5, axis="both")
+#
+#     ax.set_xlabel("Trade Number", color='grey', fontsize=12)
+#     ax.set_ylabel("Balance", color='grey', fontsize=12)
+#
+#     # Remove right and top spines
+#     ax.spines['right'].set_visible(False)
+#     ax.spines['top'].set_visible(False)
+#
+#     # Change x and y ticks style
+#     ax.tick_params(axis='x', direction='inout', length=6, width=2)
+#     ax.tick_params(axis='y', direction='inout', length=6, width=2)
+#
+#     # Change x and y label line width and color
+#     ax.spines['bottom'].set_linewidth(2)
+#     ax.spines['left'].set_linewidth(2)
+#     ax.spines['bottom'].set_color('grey')
+#     ax.spines['left'].set_color('grey')
+#
+#     # Change x and y ticks color
+#     ax.tick_params(axis='x', colors='grey')
+#     ax.tick_params(axis='y', colors='grey')
+#
+#     # Add a watermark
+#     ax.text(
+#         0.5, 0.5,               # X and Y position (relative, in axes coordinates)
+#         "@MR5OBOT",             # Watermark text
+#         fontsize=30,            # Font size
+#         color='gray',           # Text color
+#         alpha=0.12,             # Transparency (0.0 to 1.0)
+#         ha='center',            # Horizontal alignment
+#         va='center',            # Vertical alignment
+#         rotation=10,            # Rotate text
+#         transform=ax.transAxes  # Transform relative to the axes (0 to 1 range)
+#     )
+#     # debuging 
+#     logging.info("Ending the program.")
+#
+#     return fig
+#
+#
+# def clear_plot(plotFrame):
+#     # Clear the previous plot
+#     for widget in plotFrame.winfo_children():
+#         widget.destroy()
+#
+# def plot_to_canvas(balance_history, plotFrame):
+#     # Add canvas to the plotFrame
+#     clear_plot(plotFrame)
+#     fig = creat_plot(balance_history)
+#     canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
+#     canvas.get_tk_widget().pack(fill="both", expand=True)
+#     canvas.draw()
+#
+# def save_plot(balance_history):
+#     fig = creat_plot(balance_history)
+#     fig.savefig("Simulation_result.png")
+#     logging.info("Plot saved as 'Simulation_result.png'")
+#

@@ -1,32 +1,37 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import messagebox
+# from tkinter import messagebox
 import logging
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+# custom module
 from resources.custom_func.expirements_funcs import probability_simulator
 
 
-#------------ plotting -------------#
-def update_plot(balance_history):
+# ------------ plotting -------------#
+def clear_plot():
     # Clear the previous plot
     for widget in plotFrame.winfo_children():
         widget.destroy()
 
+def get_balance_history():
+    balance_history = probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
+    return balance_history
+
+def creat_plot():
     plt.style.use("dark_background")
-    fig = Figure()
+    fig = Figure(figsize=(9, 6))
     ax = fig.add_subplot()
-    ax.plot(balance_history)  # Example data
-    #debuging
-    logging.info("plotting the performance")
+    data = get_balance_history()
+    ax.plot(data, label="balance_history")
 
     ax.set_title("Simulation Results", color='grey', fontsize=20, loc='center', pad=15)
     ax.grid(color='#161616', linestyle='--', linewidth=0.5, axis="both")
 
-    ax.set_xlabel("Trade Number", color='grey', fontsize=12)
-    ax.set_ylabel("Balance", color='grey', fontsize=12)
+    # ax.set_xlabel("Trade Number", color='grey', fontsize=12)
+    # ax.set_ylabel("Balance", color='grey', fontsize=12)
 
     # Remove right and top spines
     ax.spines['right'].set_visible(False)
@@ -49,7 +54,7 @@ def update_plot(balance_history):
     # Add a watermark
     ax.text(
         0.5, 0.5,               # X and Y position (relative, in axes coordinates)
-        "@MR5OBOT",             # Watermark text
+        "@MR_5OBOT",             # Watermark text
         fontsize=30,            # Font size
         color='gray',           # Text color
         alpha=0.12,             # Transparency (0.0 to 1.0)
@@ -58,33 +63,33 @@ def update_plot(balance_history):
         rotation=10,            # Rotate text
         transform=ax.transAxes  # Transform relative to the axes (0 to 1 range)
     )
-
-    # Add canvas to the plotFrame
-    canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
-    canvas.get_tk_widget().pack(fill="both", expand=True)
-    canvas.draw()
-
     # debuging 
     logging.info("Ending the program.")
 
     return fig
 
+def plot_to_canvas():
+    # Add canvas to the plotFrame
+    clear_plot()
+    fig = creat_plot()
+    canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
+    canvas.get_tk_widget().pack(fill="both", expand=True)
+    canvas.draw()
+    logging.info("Plotting the graph to the canvas")
 
-# calculate and plot Button
-def calculate_and_plot():
-    # Get balance history from the simulator
-    balance_history = probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
-    # Pass both to the plot function
-    update_plot(balance_history)
+# a func to save the plot
+def save_plot():
+    fig = creat_plot()
+    fig.savefig("resources/saved_plots/simulation_results.png", facecolor=fig.get_facecolor())
+    logging.info("Saving the plot to a file")
 
 # the function that will be triggered when the checkbox is toggled
 def risk_reducer_func():
-    # Check if the Checkbutton is checked
     if check_var.get() == 1:  # If checked
-        consecutive_LossesEntry.config(state='normal')  # Enable entry2
+        consecutive_LossesEntry.config(state='normal')  # Enable entry
     else:  # If unchecked
         consecutive_LossesEntry.delete(0)
-        consecutive_LossesEntry.config(state='disabled')  # Disable entry2
+        consecutive_LossesEntry.config(state='disabled')  # Disable entry
 
 #------- GUI ------#
 app = tk.Tk()
@@ -142,7 +147,7 @@ check_var = tk.IntVar()
 risk_reducerbutton = ttk.Checkbutton(inputsLabel, text="Risk Reducer", variable=check_var, command=risk_reducer_func)
 risk_reducerbutton.grid(column=0, row=7, pady=5)
 
-calculateButton = ttk.Button(inputsLabel, text="Run Simulation", command=calculate_and_plot)
+calculateButton = ttk.Button(inputsLabel, text="Run Simulation", command=plot_to_canvas)
 calculateButton.grid(column=0, row=8, sticky="ew", pady=5)
 
 separator = ttk.Separator(inputsLabel, orient="horizontal")
@@ -153,8 +158,8 @@ result_frame.grid(column=0, row=10, sticky="nsew")
 result_label = ttk.Label(result_frame, text="", anchor="center")
 result_label.pack(expand=True, fill="both", padx=5, pady=5)
 
-# save_pic = ttk.Button(inputsLabel, text="Save Results", command=on_save_button_click)
-# save_pic.grid(column=0, row=11, pady=5, padx=5)
+save_pic = ttk.Button(inputsLabel, text="Save Results", command=save_plot)
+save_pic.grid(column=0, row=11, pady=5, padx=5)
 
 #----- tab1 plot frame -----#
 plotFrame = ttk.LabelFrame(app_frame, text="Plot Graph", padding=(15, 15))
