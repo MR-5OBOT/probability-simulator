@@ -1,223 +1,122 @@
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
+# import matplotlib.pyplot as plt
+# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# from matplotlib.figure import Figure
 from tkinter import messagebox
-import logging
+# import logging
 import random
 
 
-def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label):
-    # for debuging 
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
-    logging.info("Starting simulation")
-
-    try:
-        # Get user inputs
-        initial_balance = float(balanceEntry.get())
-        winrate = float(winrateEntry.get())
-        risk_percent = float(riskEntry.get())
-        rr_ratio = float(rrEntry.get())
-        consecutive_L_treshold = consecutive_LossesEntry.get().strip()  # .strip() to remove extra spaces
-        num_trades = int(nTrades_entry.get())
-
-        # Validate inputs
-        if initial_balance <= 0 or risk_percent <= 0 or rr_ratio <= 0 or num_trades <= 0 or winrate <= 0:
-            result_label.configure(text="Error: All inputs must be positive numbers.")
-            messagebox.showinfo(message="Error: All inputs must be positive numbers.")
-            # debuging
-            logging.error("Error: All inputs must be positive numbers.")
-            return
-
+class Simulation:
+    def __init__(self, initial_balance, winrate, risk_percent, rr_ratio, consecutive_L_treshold, num_trades):
+        # Set user inputs
+        self.initial_balance = initial_balance
+        self.winrate = winrate
+        self.risk_percent = risk_percent
+        self.rr_ratio = rr_ratio
+        self.consecutive_L_treshold = consecutive_L_treshold
+        self.num_trades = num_trades
 
         # Initialize variables
-        balance = initial_balance
-        balance_history = [initial_balance]
-        consecutive_losses = 0
-        max_consecutive_losses = 0
-        wins = 0
-        losses = 0
-        avg_win = 0
-        avg_loss = 0
-        wins_profits = 0 
-        losses_profits = 0
+        self.balance = initial_balance
+        self.balance_history = [initial_balance]
+        self.consecutive_losses = 0
+        self.max_consecutive_losses = 0
+        self.wins = 0
+        self.losses = 0
+        self.avg_win = 0
+        self.avg_loss = 0
+        self.wins_profits = 0
+        self.losses_profits = 0
+        self.reduced_risk_active = False  # Track if risk reduction is active
 
-        reduced_risk_active = False  # Track if risk reduction is active
-
-        for trade in range(num_trades):
-            if reduced_risk_active:
-                risk_amount = balance * (risk_percent / 100) / 2 
+    def simulate_trade(self):
+        for trade in range(self.num_trades):
+            if self.reduced_risk_active:
+                risk_amount = self.balance * (self.risk_percent / 100) / 2
             else:
-                risk_amount = balance * (risk_percent / 100)
-
-            # logging.info("Calculate risk amount.")
+                risk_amount = self.balance * (self.risk_percent / 100)
 
             # Simulate trade outcome
-            if random.random() <= winrate:
-                profit = risk_amount * rr_ratio
-                balance += profit
-                wins += 1
-                wins_profits += profit 
-                consecutive_losses = 0
-                reduced_risk_active = False  # Reset risk reduction on a win
-                # debuging
-                # logging.info("wining trade")
+            if random.random() <= self.winrate:
+                profit = risk_amount * self.rr_ratio
+                self.balance += profit
+                self.wins += 1
+                self.wins_profits += profit
+                self.consecutive_losses = 0
+                self.reduced_risk_active = False  # Reset risk reduction on a win
             else:
                 loss = risk_amount
-                balance -= loss
-                losses += 1
-                losses_profits += loss
-                consecutive_losses += 1
-                max_consecutive_losses = max(max_consecutive_losses, consecutive_losses)
-                # debuging
-                # logging.info("lossing trade")
+                self.balance -= loss
+                self.losses += 1
+                self.losses_profits += loss
+                self.consecutive_losses += 1
+                self.max_consecutive_losses = max(self.max_consecutive_losses, self.consecutive_losses)
 
             # Check for consecutive losses threshold
-            if consecutive_L_treshold:  # Only reduce risk if the input is not empty
+            if self.consecutive_L_treshold:  # Only reduce risk if the input is not empty
                 try:
-                    threshold = int(consecutive_L_treshold)
-                    if consecutive_losses >= threshold:
-                        reduced_risk_active = True  # Activate risk reduction
-                        logging.info("Reducing risk")
+                    threshold = int(self.consecutive_L_treshold)
+                    if self.consecutive_losses >= threshold:
+                        self.reduced_risk_active = True  # Activate risk reduction
                 except ValueError:
                     pass  # If conversion fails, don't adjust risk
-            # debuging
-            logging.info("risk reducer is not active!")
 
             # Append the current balance to history
-            balance_history.append(balance)
-            if not balance_history:
-                result_label.configure(text="Error: Simulation failed. No balance data to plot.")
-                return
-            #debuging
-            # logging.info("new balance added!")
+            self.balance_history.append(self.balance)
 
+        return self.balance_history
+
+    def calculate_metrics(self):
         # Calculate Max Drawdown from Balance History
         max_drawdown = 0
-        peak_balance = balance_history[0]
+        peak_balance = self.balance_history[0]
 
-        for bal in balance_history:
+        for bal in self.balance_history:
             if bal > peak_balance:
                 peak_balance = bal
             drawdown = (peak_balance - bal) / peak_balance
             max_drawdown = max(max_drawdown, drawdown)
-        max_drawdown *= 100 # Convert to percentage
+        max_drawdown *= 100
 
         # Calculate total return
-        total_return = ((balance - initial_balance) / initial_balance) * 100
+        total_return = ((self.balance - self.initial_balance) / self.initial_balance) * 100
 
         # Expected Value (EV) formula
-        actual_winrate = wins / num_trades if wins > 0 else 0
+        actual_winrate = self.wins / self.num_trades if self.wins > 0 else 0
 
-        if wins + losses == num_trades:
-            avg_win = wins_profits / wins if wins > 0 else 0
-            avg_loss = losses_profits / losses if losses > 0 else 0
+        if self.wins + self.losses == self.num_trades:
+            self.avg_win = self.wins_profits / self.wins if self.wins > 0 else 0
+            self.avg_loss = self.losses_profits / self.losses if self.losses > 0 else 0
 
-        expected_value = (actual_winrate * avg_win) - ((1 - actual_winrate) * avg_loss)
+        expected_value = (actual_winrate * self.avg_win) - ((1 - actual_winrate) * self.avg_loss)
 
-        # Display results in a messagebox
+        return total_return, max_drawdown, self.max_consecutive_losses, self.avg_win, self.avg_loss, expected_value
+
+    # display results in a messagebox
+    def display_results(self):
+        total_return, max_drawdown, max_consecutive_losses, avg_win, avg_loss, expected_value = self.calculate_metrics()
+
         messagebox.showinfo(
-                message=(
-                f"Final Balance: ${balance:.2f}\n"
+            message=(
+                f"Final Balance: ${self.balance:.2f}\n"
                 f"Total Return: {total_return:.2f}%\n"
                 f"Max Drawdown: {max_drawdown:.2f}%\n"
                 f"Consecutive Losses: {max_consecutive_losses:.0f}\n"
                 f"Average Win: ${avg_win:.2f}\n"
                 f"Average Loss: {avg_loss:.2f}\n"
                 f"Expected Value: ${expected_value:.2f}"
-                )
-        )
-        result_label.configure(
-                text=(
-                f"Final Balance: ${balance:.2f}\n"
-                f"Total Return: {total_return:.2f}%\n"
-                f"Max Drawdown: {max_drawdown:.2f}%\n"
-                f"Consecutive Losses: {max_consecutive_losses:.0f}\n"
-                f"Average Win: ${avg_win:.2f}\n"
-                f"Average Loss: {avg_loss:.2f}\n"
-                f"Expected Value: ${expected_value:.2f}"
-                )
+            )
         )
 
-        return balance_history
+        # display results in a label
+        return (
+            f"Final Balance: ${self.balance:.2f}\n"
+            f"Total Return: {total_return:.2f}%\n"
+            f"Max Drawdown: {max_drawdown:.2f}%\n"
+            f"Consecutive Losses: {max_consecutive_losses:.0f}\n"
+            f"Average Win: ${avg_win:.2f}\n"
+            f"Average Loss: {avg_loss:.2f}\n"
+            f"Expected Value: ${expected_value:.2f}"
+        )
 
-    except ValueError:
-        messagebox.showerror(message="Error: Please enter valid numbers.")
-        result_label.configure(text="Error: Please enter valid numbers.")
 
-    #debuging
-    logging.info("simulation ended.")
-
-
-# def creat_plot(balance_history):
-#     """Function to plot the balance history"""
-#     plt.style.use("dark_background")
-#     fig = Figure()
-#     ax = fig.add_subplot()
-#     plt.plot(balance_history)
-#     # ax.plot(balance_history)  # Example data
-#     # data = probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
-#     # data = get_balance_history()
-#     # ax.plot(data, label="balance_history")  # Example data
-#     #debuging
-#     logging.info("plotting the performance")
-#
-#     ax.set_title("Simulation Results", color='grey', fontsize=20, loc='center', pad=15)
-#     ax.grid(color='#161616', linestyle='--', linewidth=0.5, axis="both")
-#
-#     ax.set_xlabel("Trade Number", color='grey', fontsize=12)
-#     ax.set_ylabel("Balance", color='grey', fontsize=12)
-#
-#     # Remove right and top spines
-#     ax.spines['right'].set_visible(False)
-#     ax.spines['top'].set_visible(False)
-#
-#     # Change x and y ticks style
-#     ax.tick_params(axis='x', direction='inout', length=6, width=2)
-#     ax.tick_params(axis='y', direction='inout', length=6, width=2)
-#
-#     # Change x and y label line width and color
-#     ax.spines['bottom'].set_linewidth(2)
-#     ax.spines['left'].set_linewidth(2)
-#     ax.spines['bottom'].set_color('grey')
-#     ax.spines['left'].set_color('grey')
-#
-#     # Change x and y ticks color
-#     ax.tick_params(axis='x', colors='grey')
-#     ax.tick_params(axis='y', colors='grey')
-#
-#     # Add a watermark
-#     ax.text(
-#         0.5, 0.5,               # X and Y position (relative, in axes coordinates)
-#         "@MR5OBOT",             # Watermark text
-#         fontsize=30,            # Font size
-#         color='gray',           # Text color
-#         alpha=0.12,             # Transparency (0.0 to 1.0)
-#         ha='center',            # Horizontal alignment
-#         va='center',            # Vertical alignment
-#         rotation=10,            # Rotate text
-#         transform=ax.transAxes  # Transform relative to the axes (0 to 1 range)
-#     )
-#     # debuging 
-#     logging.info("Ending the program.")
-#
-#     return fig
-#
-#
-# def clear_plot(plotFrame):
-#     # Clear the previous plot
-#     for widget in plotFrame.winfo_children():
-#         widget.destroy()
-#
-# def plot_to_canvas(balance_history, plotFrame):
-#     # Add canvas to the plotFrame
-#     clear_plot(plotFrame)
-#     fig = creat_plot(balance_history)
-#     canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
-#     canvas.get_tk_widget().pack(fill="both", expand=True)
-#     canvas.draw()
-#
-# def save_plot(balance_history):
-#     fig = creat_plot(balance_history)
-#     fig.savefig("Simulation_result.png")
-#     logging.info("Plot saved as 'Simulation_result.png'")
-#
