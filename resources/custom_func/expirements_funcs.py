@@ -22,8 +22,8 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
 
         # Validate inputs
         if initial_balance <= 0 or risk_percent <= 0 or rr_ratio <= 0 or num_trades <= 0 or winrate <= 0:
-            result_label.configure(text="Error: All inputs must be positive numbers.")
-            messagebox.showinfo(message="Error: All inputs must be positive numbers.")
+            # result_label.configure(text="Error: All inputs must be positive numbers.")
+            messagebox.showerror(message="Error: All inputs must be positive numbers.")
             # debuging
             logging.error("Error: All inputs must be positive numbers.")
             return
@@ -77,11 +77,8 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
                     threshold = int(consecutive_L_treshold)
                     if consecutive_losses >= threshold:
                         reduced_risk_active = True  # Activate risk reduction
-                        logging.info("Reducing risk")
                 except ValueError:
                     pass  # If conversion fails, don't adjust risk
-            # debuging
-            logging.info("risk reducer is not active!")
 
             # Append the current balance to history
             balance_history.append(balance)

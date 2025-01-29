@@ -13,9 +13,8 @@ from resources.custom_func.expirements_funcs import (
     probability_simulator,
 )
 
+
 # ------------ plotting -------------#
-
-
 def start_simulation():
     probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
 
@@ -53,7 +52,7 @@ def creat_plot():
     # Add a watermark
     ax.text(
         0.5, 0.5,               # X and Y position (relative, in axes coordinates)
-        "@MR_5OBOT",             # Watermark text
+        "@MR_5OBOT",            # Watermark text
         fontsize=30,            # Font size
         color='gray',           # Text color
         alpha=0.12,             # Transparency (0.0 to 1.0)
@@ -62,17 +61,9 @@ def creat_plot():
         rotation=10,            # Rotate text
         transform=ax.transAxes  # Transform relative to the axes (0 to 1 range)
     )
-    # debuging 
-    logging.info("Ending the program.")
+    logging.info("plotting the graph")
 
     return fig
-
-# a func to save the plot
-def save_plot():
-    fig = creat_plot()
-    fig.savefig("simulation_results.png")
-    logging.info("Saving the plot to a file")
-    messagebox.showinfo("Save", "The plot has been saved as 'simulation_results.png'")
 
 def plot_to_canvas():
     # Add canvas to the plotFrame
@@ -83,6 +74,15 @@ def plot_to_canvas():
     canvas.get_tk_widget().pack(fill="both", expand=True)
     canvas.draw()
     logging.info("Plotting the graph to the canvas")
+
+def save_plot():
+    try:
+        fig = creat_plot()
+        fig.savefig("simulation_results.png")
+        logging.info("Saving the plot to a file")
+        messagebox.showinfo("Save", "The plot has been saved as 'simulation_results.png'") 
+    except Exception:
+        messagebox.showerror("Error", "No data to save. Please run the simulation first.")
 
 def clear_plot():
     # Clear the previous plot
@@ -143,9 +143,6 @@ consecutive_LossesEntry.insert(0, 'losses treshold')
 consecutive_LossesEntry.bind("<FocusIn>", lambda _: consecutive_LossesEntry.delete('0', 'end'))
 consecutive_LossesEntry.grid(column=0, row=5, sticky="ew", pady=5)
 consecutive_LossesEntry.config(state="disabled")
-
-# separator = ttk.Separator(inputsLabel, orient="horizontal")
-# separator.grid(column=0, row=6, sticky="nsew", pady=10)
 
 # Variable for Checkbutton state
 check_var = tk.IntVar()
