@@ -1,9 +1,1 @@
-env
-dist/
-build/
-__pycache__/
-*.pyc
-venv/
-.venv/
-todos
-*.png
+__pycache__
