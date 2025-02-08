@@ -7,20 +7,13 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 # custom module
-from resources.custom_func.expirements_funcs import (get_balance_history,
-                                                     probability_simulator)
+from resources.custom_func.expirements_funcs import (get_balance_history,probability_simulator)
 
 
 # ------------ plotting -------------#
 def start_simulation():
     probability_simulator(
-        balanceEntry,
-        winrateEntry,
-        riskEntry,
-        rrEntry,
-        consecutive_LossesEntry,
-        nTrades_entry,
-        result_label,
+        balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label
     )
 
 

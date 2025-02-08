@@ -1,4 +1,3 @@
-# from tkinter import messagebox
 import logging
 import tkinter as tk
 from tkinter import messagebox, ttk
@@ -8,10 +7,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 # custom module
-from resources.custom_func.expirements_funcs import (
-    get_balance_history,
-    probability_simulator,
-)
+from resources.custom_func.expirements_funcs import (get_balance_history, probability_simulator)
 
 
 # ------------ plotting -------------#
