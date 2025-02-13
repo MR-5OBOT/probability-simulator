@@ -1,4 +1,3 @@
-import csv
 import logging
 import random
 
@@ -31,8 +30,8 @@ initial_balance = 50000
 
 # function to control risk dynamiclly
 def risk_reducer(virtual_balance, current_risk):
-    increase_check = virtual_balance * 1.03
-    decrease_check = virtual_balance * 0.98
+    increase_check = initial_balance * 1.03
+    decrease_check = initial_balance * 0.98
 
     if virtual_balance >= increase_check:
         increase_risk = 0.02
@@ -47,7 +46,7 @@ def risk_reducer(virtual_balance, current_risk):
 
 
 # models simulations
-def simulate_trades():
+def simulate_trades(num_simulations):
     try:
         num_simulations = 10
         results = []
@@ -109,6 +108,7 @@ def simulate_trades():
             )
             logging.info(f"[Simulation] current_risk: {current_risk * 100:.2f}%")
 
+        print(results)
         return results
 
     except Exception as e:
