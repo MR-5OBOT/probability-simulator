@@ -1,3 +1,4 @@
+import csv
 import logging
 import random
 
@@ -28,8 +29,27 @@ trades_to_pass = 20
 initial_balance = 50000
 
 
-def simulate_trades(num_simulations):
+# function to control risk dynamiclly
+def risk_reducer(virtual_balance, current_risk):
+    increase_check = virtual_balance * 1.03
+    decrease_check = virtual_balance * 0.98
+
+    if virtual_balance >= increase_check:
+        increase_risk = 0.02
+        return increase_risk
+
+    elif virtual_balance <= decrease_check:
+        decrease_risk = 0.005
+        return decrease_risk
+
+    else:
+        return current_risk
+
+
+# models simulations
+def simulate_trades():
     try:
+        num_simulations = 10
         results = []
         for sim in range(num_simulations):
             virtual_balance = initial_balance
@@ -42,7 +62,8 @@ def simulate_trades(num_simulations):
             }
 
             for trade in range(trades_to_pass):
-                current_risk = risk_per_trade  # fixed risk at teh momment
+                # current_risk = risk_per_trade  # fixed risk at the momment
+                current_risk = risk_reducer(virtual_balance, current_risk)
 
                 # Calculate absolute risk amount
                 risk_amount = current_risk * virtual_balance
@@ -94,6 +115,7 @@ def simulate_trades(num_simulations):
         logging.error(f"An error occurred: {e}")
 
 
+# data charts
 def plotting(results):
     plt.style.use("dark_background")
     # plt.figure(figsize=(10, 8))
@@ -144,5 +166,5 @@ def plotting(results):
     plt.show()
 
 
-results = simulate_trades(num_simulations=10)
+results = simulate_trades()
 plotting(results)
