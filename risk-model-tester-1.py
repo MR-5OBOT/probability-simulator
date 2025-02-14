@@ -2,6 +2,7 @@ import logging
 import random
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 logging.basicConfig(level=logging.INFO)  # Set logging level
 
@@ -20,11 +21,9 @@ logging.basicConfig(level=logging.INFO)  # Set logging level
 max_overall_drawdown = 0.06
 profit_target = 0.06
 risk_per_trade = 0.01
-
 win_rate = 0.55
 reward_to_risk = 2.0  # 2:1 RR
-trades_to_pass = 20
-
+trades_to_pass = 10
 initial_balance = 50000
 
 
@@ -45,27 +44,26 @@ def risk_reducer(virtual_balance, current_risk):
         return current_risk
 
 
-# worst dd over all sims extractor
-# def max_drawdown(simulation_data):
-#     peak = simulation_data["balances"][0]
-#     max_dd = 0
-#
-#     for balance in simulation_data["balances"]:
-#         if balance > peak:
-#             peak = balance  # Update peak if new high is reached
-#         dd = (peak - balance) / peak  # Current drawdown from peak
-#         max_dd = max(max_dd, dd)  # Update max drawdown if it's worse
-#
-#     return max_dd
-#     # return max_dd * 100  # Convert to percentage
+def max_dd_sim(simulation_data, initial_balance):
+    peak = initial_balance
+    sim_drawdown = 0
+    for balance in simulation_data["balances"]:
+        if balance > peak:
+            peak = balance  # Update peak if a new high is reached
+        # Calculate the current drawdown based on the highest peak so far
+        current_drawdown = (peak - balance) / peak  # Drawdown from peak
+        # Track the worst drawdown
+        sim_drawdown = max(sim_drawdown, current_drawdown)
+    return sim_drawdown
 
 
 # models simulations
 def simulate_trades():
     try:
-        num_simulations = 2
+        num_simulations = 10
         results = []
         for sim in range(num_simulations):
+            logging.info(f"Starting simulation {sim + 1}")
             virtual_balance = initial_balance
             current_risk = risk_per_trade
             sim_drawdown = 0
@@ -77,10 +75,8 @@ def simulate_trades():
 
             for trade in range(trades_to_pass):
                 current_risk = risk_reducer(virtual_balance, current_risk)
-
                 # Calculate absolute risk amount
                 risk_amount = current_risk * initial_balance
-
                 # Simulate trade outcome
                 if random.random() < win_rate:
                     virtual_balance += reward_to_risk * risk_amount
@@ -88,9 +84,8 @@ def simulate_trades():
                     virtual_balance -= risk_amount
 
                 # Track drawdowns
-                sim_drawdown = max(
-                    sim_drawdown, initial_balance - virtual_balance
-                )
+                # sim_drawdown = max(sim_drawdown, initial_balance - virtual_balance)
+                sim_drawdown = max_dd_sim(simulation_data, initial_balance)
 
                 # Store simulation data
                 simulation_data["balances"].append(virtual_balance)
@@ -105,79 +100,66 @@ def simulate_trades():
                     # break
 
                 simulation_data["risks"].append(current_risk)
-                simulation_data["drawdowns"].append(sim_drawdown / initial_balance)
-
+                simulation_data["drawdowns"].append(sim_drawdown)
                 logging.info(f"Ending trade {trade + 1}")
-
 
             results.append(simulation_data)
             logging.info(f"Ending simulation {sim + 1}")
 
-            # track sims
-            logging.info(f"[Sim {sim}] Current virtual_balance: {virtual_balance}")
-            logging.info(f"[Sim {sim}] current_risk: {current_risk * 100:.2f}%")
-            logging.info(f"[Sim {sim}] overall_drawdown: {sim_drawdown / initial_balance * 100:.2f}%")
+            # worst dd value
+            worst_dd_all_sims = max(simulation_data["drawdowns"])
 
-            # max dd all simulations
-            # simulation_data["max_dd_all_sims"] = max_drawdown(simulation_data)
-            # logging.info(f"[Sim {sim}] Worst dd all sims: {simulation_data["max_dd_all_sims"] * 100:.2f}%")
+            # loggings
+            logging.info(f"[Sim {sim}] final balance: {virtual_balance}")
+            logging.info(f"[Sim {sim}] current_risk: {current_risk * 100:.2f}%")
+            logging.info(f"[Sim {sim}] max_drawdown: {sim_drawdown * 100:.2f}%")
+
+            logging.info(f"[sim {sim+1}] drawdowns: {simulation_data['drawdowns']}")
+            logging.info(f"[all sims] worst drawdown: {worst_dd_all_sims * 100:.2f}%")
 
         return results
 
-    except ValueError:
-        logging.error("error")
-    # except Exception as e:
-        # logging.error(f"An error occurred: {e}")
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
 
 
-# data charts
 def plotting(results):
     plt.style.use("dark_background")
-    # plt.figure(figsize=(10, 8))
+    plt.figure(figsize=(10, 6))
 
     for sim, data in enumerate(results):
-        # Plot Account Balance
-        plt.subplot(1, 1, 1)
-        # plt.plot(data["balances"], label=f"Sim {sim+1}")
+        # plt.plot(data["balances"], label=f"Sim {sim + 1}")
         plt.plot(data["balances"])
-        plt.axhline(
-            initial_balance * (1 + profit_target),
-            color="green",
-            linestyle="--",
-            label="Profit Target",
-        )
-        plt.axhline(
-            initial_balance * (1 - max_overall_drawdown),
-            color="red",
-            linestyle="--",
-            label="Max Drawdown",
-        )
 
-        # Annotate max drawdown point
-        max_dd_value = data["max_dd_all_sims"]
+        # Find worst drawdown point
+        worst_dd_value = max(data["drawdowns"])  # Max drawdown value
+        if sim == 0:
+            # worst_sim = np.argmax(worst_dd_value) + 1  # To match Sim 1, Sim 2, etc.
+            plt.plot(
+                [],
+                [],
+                color="yellow",
+                label=f"Worst Drawdown {worst_dd_value * 100:.2f}%",
+            )
+    # Add profit target and max drawdown reference lines
+    plt.axhline(
+        initial_balance * (1 + profit_target),
+        color="green",
+        linestyle="--",
+        label="Profit Target",
+    )
+    plt.axhline(
+        initial_balance * (1 - max_overall_drawdown),
+        color="red",
+        linestyle="--",
+        label="Max Drawdown",
+    )
 
-        plt.xlabel("Trade")
-        plt.ylabel("Account Balance")
-        plt.title("Account Balance Over Time")
-
-        # Plot Drawdowns
-        # plt.subplot(1, 2, 2)
-        # plt.plot(data["drawdowns"], label=f"Sim {sim+1}")
-        # plt.xlabel("Trade")
-        # plt.ylabel("Drawdown (%)")
-        # plt.title("Drawdown Over Time")
-        # plt.legend(loc="upper left")
-
-        # Plot Risk Levels
-        # plt.subplot(1, 2, 2)
-        # plt.plot(data["risks"], label=f"Sim {sim+1}")
-        # # plt.scatter(range(len(data["risks"])), data["risks"], label=f"Sim {sim+1}")
-        # plt.xlabel("Trade")
-        # plt.ylabel("Risk Level")
-        # plt.title("Risk Level Over Time")
-        # plt.legend(loc="upper left")
-
-    # plt.tight_layout()
+    # Finalize plot
+    plt.xlabel("Trade")
+    plt.ylabel("Account Balance")
+    plt.title("Account Balance Over Time")
+    plt.legend()
     plt.show()
 
 
