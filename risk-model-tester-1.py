@@ -45,15 +45,30 @@ def risk_reducer(virtual_balance, current_risk):
         return current_risk
 
 
+# worst dd over all sims extractor
+# def max_drawdown(simulation_data):
+#     peak = simulation_data["balances"][0]
+#     max_dd = 0
+#
+#     for balance in simulation_data["balances"]:
+#         if balance > peak:
+#             peak = balance  # Update peak if new high is reached
+#         dd = (peak - balance) / peak  # Current drawdown from peak
+#         max_dd = max(max_dd, dd)  # Update max drawdown if it's worse
+#
+#     return max_dd
+#     # return max_dd * 100  # Convert to percentage
+
+
 # models simulations
-def simulate_trades(num_simulations):
+def simulate_trades():
     try:
-        num_simulations = 10
+        num_simulations = 2
         results = []
         for sim in range(num_simulations):
             virtual_balance = initial_balance
             current_risk = risk_per_trade
-            overall_drawdown = 0
+            sim_drawdown = 0
             simulation_data = {
                 "balances": [virtual_balance],
                 "risks": [current_risk],
@@ -61,11 +76,10 @@ def simulate_trades(num_simulations):
             }
 
             for trade in range(trades_to_pass):
-                # current_risk = risk_per_trade  # fixed risk at the momment
                 current_risk = risk_reducer(virtual_balance, current_risk)
 
                 # Calculate absolute risk amount
-                risk_amount = current_risk * virtual_balance
+                risk_amount = current_risk * initial_balance
 
                 # Simulate trade outcome
                 if random.random() < win_rate:
@@ -74,20 +88,16 @@ def simulate_trades(num_simulations):
                     virtual_balance -= risk_amount
 
                 # Track drawdowns
-                overall_drawdown = max(
-                    overall_drawdown, initial_balance - virtual_balance
+                sim_drawdown = max(
+                    sim_drawdown, initial_balance - virtual_balance
                 )
-
-                simulation_data["max_dd_all_sims"] = (
-                    max(simulation_data["balances"]) - min(simulation_data["balances"])
-                ) / max(simulation_data["balances"])
 
                 # Store simulation data
                 simulation_data["balances"].append(virtual_balance)
                 logging.info(f"Trade {trade + 1} - Balance: {virtual_balance}")
 
                 # Check for violations
-                if overall_drawdown >= max_overall_drawdown * initial_balance:
+                if sim_drawdown >= max_overall_drawdown * initial_balance:
                     logging.info("max dd reached!")
                     # break
                 if virtual_balance >= initial_balance * (1 + profit_target):
@@ -95,24 +105,29 @@ def simulate_trades(num_simulations):
                     # break
 
                 simulation_data["risks"].append(current_risk)
-                simulation_data["drawdowns"].append(overall_drawdown / initial_balance)
+                simulation_data["drawdowns"].append(sim_drawdown / initial_balance)
 
                 logging.info(f"Ending trade {trade + 1}")
+
 
             results.append(simulation_data)
             logging.info(f"Ending simulation {sim + 1}")
 
-            logging.info(f"[Simulation] Current virtual_balance: {virtual_balance}")
-            logging.info(
-                f"[Simulation] overall_drawdown: {overall_drawdown / initial_balance * 100:.2f}%"
-            )
-            logging.info(f"[Simulation] current_risk: {current_risk * 100:.2f}%")
+            # track sims
+            logging.info(f"[Sim {sim}] Current virtual_balance: {virtual_balance}")
+            logging.info(f"[Sim {sim}] current_risk: {current_risk * 100:.2f}%")
+            logging.info(f"[Sim {sim}] overall_drawdown: {sim_drawdown / initial_balance * 100:.2f}%")
 
-        print(results)
+            # max dd all simulations
+            # simulation_data["max_dd_all_sims"] = max_drawdown(simulation_data)
+            # logging.info(f"[Sim {sim}] Worst dd all sims: {simulation_data["max_dd_all_sims"] * 100:.2f}%")
+
         return results
 
-    except Exception as e:
-        logging.error(f"An error occurred: {e}")
+    except ValueError:
+        logging.error("error")
+    # except Exception as e:
+        # logging.error(f"An error occurred: {e}")
 
 
 # data charts
