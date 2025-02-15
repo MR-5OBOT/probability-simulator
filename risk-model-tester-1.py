@@ -87,10 +87,12 @@ def simulate_trades():
 
                 # Check for violations
                 if sim_drawdown >= max_overall_drawdown * initial_balance:
-                    logging.info(f"balance reached max dd at trade: {trade + 1}")
+                    # logging.info(f"balance reached max dd at trade: {trade + 1}")
+                    pass
                     # break
                 elif virtual_balance >= initial_balance * (1 + profit_target):
-                    logging.info(f"balance reached target at trade: {trade +1}")
+                    # logging.info(f"balance reached target at trade: {trade +1}")
+                    pass
                     # break
 
                 simulation_data["risks"].append(current_risk)
