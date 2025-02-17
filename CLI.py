@@ -1,25 +1,22 @@
 import logging
-import random
 from tkinter import messagebox
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+import random
 
-# import matplotlib.pyplot as plt
-# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-# from matplotlib.figure import Figure
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 
 
 def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry):
-    # for debuging
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
-    logging.info("Starting simulation")
-
     try:
+        logging.info("Starting simulation")
         # Get user inputs
-        initial_balance = float(balanceEntry.get())
-        winrate = float(winrateEntry.get())
-        risk_percent = float(riskEntry.get())
-        rr_ratio = float(rrEntry.get())
-        consecutive_L_treshold = consecutive_LossesEntry.get().strip()  # .strip() to remove extra spaces
-        num_trades = int(nTrades_entry.get())
+        initial_balance = float(balanceEntry)
+        winrate = float(winrateEntry)
+        risk_percent = float(riskEntry)
+        rr_ratio = float(rrEntry)
+        consecutive_L_treshold = consecutive_LossesEntry
+        num_trades = int(nTrades_entry)
 
         # Validate inputs
         if initial_balance <= 0 or risk_percent <= 0 or rr_ratio <= 0 or num_trades <= 0 or winrate <= 0:
@@ -120,7 +117,7 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
             f"Expected Value: ${expected_value:.2f}"
         )
 
-        return balance_history, max_consecutive_losses, max_drawdown
+        return balance_history
 
     except ValueError:
         messagebox.showerror(message="Error: Please enter valid numbers.")
@@ -129,5 +126,66 @@ def probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consec
     logging.info("simulation ended.")
 
 
-def get_balance_history():
-    return balance_history
+
+def creat_plot():
+    plt.style.use("dark_background")
+    fig = Figure(figsize=(9, 6))
+    ax = plt.gca()  # Get the current axis
+    ax.plot(balance_history, label="balance_history")
+
+    ax.set_title("Simulation Results", color="grey", fontsize=20, loc="center", pad=15)
+    ax.grid(color="#161616", linestyle="--", linewidth=0.5, axis="both")
+    ax.set_xlabel("Trade Number", color='grey', fontsize=12)
+    ax.set_ylabel("Balance", color='grey', fontsize=12)
+
+    # Remove right and top spines
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    # Change x and y ticks style
+    ax.tick_params(axis="x", direction="inout", length=6, width=2)
+    ax.tick_params(axis="y", direction="inout", length=6, width=2)
+
+    # Change x and y label line width and color
+    ax.spines["bottom"].set_linewidth(2)
+    ax.spines["left"].set_linewidth(2)
+    ax.spines["bottom"].set_color("grey")
+    ax.spines["left"].set_color("grey")
+    # Change x and y ticks color
+    ax.tick_params(axis="x", colors="grey")
+    ax.tick_params(axis="y", colors="grey")
+    # Add a watermark
+    ax.text(
+        0.5,
+        0.5,  # X and Y position (relative, in axes coordinates)
+        "@MR_5OBOT",  # Watermark text
+        fontsize=30,  # Font size
+        color="gray",  # Text color
+        alpha=0.12,  # Transparency (0.0 to 1.0)
+        ha="center",  # Horizontal alignment
+        va="center",  # Vertical alignment
+        rotation=10,  # Rotate text
+        transform=ax.transAxes,  # Transform relative to the axes (0 to 1 range)
+    )
+    logging.info("plotting the graph")
+    plt.savefig("simulation_results.png")
+    logging.info("Saving the plot to a file")
+    plt.show()
+
+    return fig
+
+
+if __name__ == "__main__":
+    # balanceEntry = input("initial balance: ")
+    # winrateEntry = input("winrate: ")
+    # riskEntry = input("Risk percentage: ")
+    # rrEntry = input("R/R: ")
+    # consecutive_LossesEntry = (input("consecutive_Losses treshold: "),)
+    # nTrades_entry = input("total trades: ")
+    balanceEntry = 50000
+    winrateEntry = 0.55
+    riskEntry = 0.01
+    rrEntry = 2
+    consecutive_LossesEntry = 1
+    nTrades_entry = 100
+    probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry)
+    creat_plot()
