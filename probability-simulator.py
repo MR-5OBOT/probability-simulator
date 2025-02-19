@@ -5,24 +5,23 @@ from tkinter import messagebox, ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-
 # custom module
-from resources.custom_func.expirements_funcs import (get_balance_history,probability_simulator)
+from resources.custom_func.sim_func import (get_balance_history,
+                                            probability_simulator)
 
 
 # ------------ plotting -------------#
 def start_simulation():
-    probability_simulator(
-        balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label
-    )
+    probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
 
 
 def creat_plot():
     plt.style.use("dark_background")
     fig = Figure(figsize=(9, 6))
     ax = fig.add_subplot()
-    data = get_balance_history()
-    ax.plot(data, label="balance_history")
+    # data = get_balance_history()
+    balance_history = probability_simulator(balanceEntry, winrateEntry, riskEntry, rrEntry, consecutive_LossesEntry, nTrades_entry, result_label)
+    ax.plot(balance_history, label="balance_history")
 
     ax.set_title("Simulation Results", color="grey", fontsize=20, loc="center", pad=15)
     ax.grid(color="#161616", linestyle="--", linewidth=0.5, axis="both")
@@ -69,7 +68,6 @@ def creat_plot():
 def plot_to_canvas():
     # Add canvas to the plotFrame
     clear_plot()
-    start_simulation()
     fig = creat_plot()
     canvas = FigureCanvasTkAgg(fig, master=plotFrame)  # A tk.DrawingArea.
     canvas.get_tk_widget().pack(fill="both", expand=True)
@@ -82,13 +80,9 @@ def save_plot():
         fig = creat_plot()
         fig.savefig("simulation_results.png")
         logging.info("Saving the plot to a file")
-        messagebox.showinfo(
-            "Save", "The plot has been saved as 'simulation_results.png'"
-        )
+        messagebox.showinfo("Save", "The plot has been saved as 'simulation_results.png'")
     except Exception:
-        messagebox.showerror(
-            "Error", "No data to save. Please run the simulation first."
-        )
+        messagebox.showerror("Error", "No data to save. Please run the simulation first.")
 
 
 def clear_plot():
@@ -109,9 +103,7 @@ def risk_reducer_func():
 # ------- GUI ------#
 app = tk.Tk()
 style = ttk.Style(app)  # Create a style object
-app.tk.call(
-    "source", "./resources/Forest-ttk-theme/forest-dark.tcl"
-)  # Load custom theme
+app.tk.call("source", "./resources/Forest-ttk-theme/forest-dark.tcl")  # Load custom theme
 style.theme_use("forest-dark")  # Set custom theme
 
 app.title("Probability Simulator")
@@ -126,16 +118,12 @@ inputsLabel.pack(side="left", padx=5)
 
 balanceEntry = ttk.Spinbox(inputsLabel, from_=1000, to=1000000, increment=100)
 balanceEntry.insert(0, "balance")
-balanceEntry.bind(
-    "<FocusIn>", lambda _: balanceEntry.delete("0", "end")
-)  # Clear the entry when clicked
+balanceEntry.bind("<FocusIn>", lambda _: balanceEntry.delete("0", "end"))  # Clear the entry when clicked
 balanceEntry.grid(column=0, row=0, sticky="ew", pady=5)
 
 winrateEntry = ttk.Spinbox(inputsLabel, from_=0, to=1, increment=0.1)
 winrateEntry.insert(0, "winrate (decimal)")
-winrateEntry.bind(
-    "<FocusIn>", lambda _: winrateEntry.delete("0", "end")
-)  # Clear the entry when clicked
+winrateEntry.bind("<FocusIn>", lambda _: winrateEntry.delete("0", "end"))  # Clear the entry when clicked
 winrateEntry.grid(column=0, row=1, sticky="ew", pady=5)
 
 riskEntry = ttk.Spinbox(inputsLabel, from_=0, to=5, increment=0.1)
@@ -155,18 +143,14 @@ nTrades_entry.grid(column=0, row=4, sticky="ew", pady=5)
 
 consecutive_LossesEntry = ttk.Spinbox(inputsLabel, from_=0, to=1000, increment=1)
 consecutive_LossesEntry.insert(0, "losses treshold")
-consecutive_LossesEntry.bind(
-    "<FocusIn>", lambda _: consecutive_LossesEntry.delete("0", "end")
-)
+consecutive_LossesEntry.bind("<FocusIn>", lambda _: consecutive_LossesEntry.delete("0", "end"))
 consecutive_LossesEntry.grid(column=0, row=5, sticky="ew", pady=5)
 consecutive_LossesEntry.config(state="disabled")
 
 # Variable for Checkbutton state
 check_var = tk.IntVar()
 # Create Checkbutton and place it inside the LabelFrame
-risk_reducerbutton = ttk.Checkbutton(
-    inputsLabel, text="Risk Reducer", variable=check_var, command=risk_reducer_func
-)
+risk_reducerbutton = ttk.Checkbutton(inputsLabel, text="Risk Reducer", variable=check_var, command=risk_reducer_func)
 risk_reducerbutton.grid(column=0, row=7, pady=5)
 
 calculateButton = ttk.Button(inputsLabel, text="Run Simulation", command=plot_to_canvas)
