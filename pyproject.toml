@@ -1,0 +1,10 @@
+[project]
+name = "probability-simulator"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "customtkinter>=5.2.2",
+    "matplotlib>=3.10.3",
+]
